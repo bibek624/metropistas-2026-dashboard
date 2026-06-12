@@ -1,5 +1,26 @@
 # Progress Log
 
+## 2026-06-12 — round 4 (user feedback)
+
+- **Colors**: value ramps now red→yellow→green (red = bad, green = good) for Friction 2026
+  and Δ Friction; gray "no value" is clearly distinct (the old sand 50-color ≈ gray problem).
+- **"All" network view removed** — AMPR / PRTR only (default AMPR); switching networks
+  auto-zooms to that network's extent; off-network miles row kept (global figure).
+- **Right-hand docked panel** replaces the floating layer box: Layer card (+legend),
+  Basemap card, Test lines card with a Show-test-lines toggle that reveals the Days/Runs
+  dropdowns. Left sidebar = Progress + Roads only.
+- **Test lines**: dashed colored lines over white casing, labeled along the line with
+  "date · file name". Labels live on a SEPARATE geojson source so a failed glyph fetch
+  can only drop labels — it can no longer take the line layers down with it (suspected
+  cause of the invisible-lines bug; map.on("error") logging added so any remaining cause
+  shows in the browser console). Line colors are baked per-feature (_color) instead of a
+  match expression.
+- **Info panel** is a horizontal bottom strip: identity+chips | metadata columns | charts —
+  content fits without vertical scrolling.
+- **MFV mode** now shows IRI-focused info (IRI 2025 chip, IRI 2026 "—", IRI/PCI charts,
+  no friction bars/chips/metadata) instead of repeating RFT values.
+- **2021 columns omitted** for PRTR (no 2021 fields in its schema) — charts detect absence.
+
 ## 2026-06-12 — polish round 3 (user feedback)
 
 - **Satellite basemap** (Esri World Imagery) is now the default background; a Basemap

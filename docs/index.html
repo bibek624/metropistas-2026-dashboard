@@ -15,8 +15,7 @@
     <button data-mode="MFV">MFV · IRI</button>
   </div>
   <div class="ctrl-group" id="network-toggle">
-    <button data-net="ALL" class="active">All</button>
-    <button data-net="AMPR">AMPR</button>
+    <button data-net="AMPR" class="active">AMPR</button>
     <button data-net="PRTR">PRTR</button>
   </div>
   <div class="ctrl-group" id="level-toggle">
@@ -41,26 +40,31 @@
       <summary>Roads <span class="hint">tap to zoom</span></summary>
       <div id="road-bars"></div>
     </details>
-
-    <details class="card" id="lines-card">
-      <summary>Test lines <span class="hint" id="lines-hint"></span></summary>
-      <div id="testline-panel"></div>
-    </details>
   </aside>
 
   <div id="map">
-    <div id="layer-box">
-      <div class="lb-title">Layer</div>
-      <div id="layer-list"></div>
-      <div id="legend"></div>
-      <div class="lb-title lb-base">Basemap</div>
-      <div id="basemap-list"></div>
-    </div>
     <div id="info-panel">
       <button id="info-close" title="Close">✕</button>
       <div id="info-content"></div>
     </div>
   </div>
+
+  <aside id="rightbar">
+    <div class="card">
+      <h2>Layer</h2>
+      <div id="layer-list"></div>
+      <div id="legend"></div>
+    </div>
+    <div class="card">
+      <h2>Basemap</h2>
+      <div id="basemap-list"></div>
+    </div>
+    <div class="card" id="lines-card">
+      <h2>Test lines</h2>
+      <label class="tl-switch"><input type="checkbox" id="tl-toggle" checked> Show test lines <span class="hint" id="lines-hint"></span></label>
+      <div id="testline-panel"></div>
+    </div>
+  </aside>
 </div>
 
 <div id="loading">Loading data…</div>

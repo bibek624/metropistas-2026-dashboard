@@ -26,12 +26,13 @@ const MODE_LAYERS = {
 };
 
 const state = {
-  net: "ALL",
+  net: "AMPR",
   road: "",
   level: "segments",
   mode: "RFT",
   layer: "friction",
   basemap: "sat",
+  showLines: true,
   dayOn: new Set(),
   runSel: new Set(),   // keys "day|file"
 };
@@ -85,6 +86,7 @@ async function init() {
   });
   map.addControl(new maplibregl.NavigationControl(), "top-right");
   map.addControl(new maplibregl.ScaleControl({ unit: "imperial" }));
+  map.on("error", (e) => console.warn("[map]", e && e.error ? e.error.message : e));
 
   // register before the data fetches so a 'load' fired mid-fetch can't be missed
   const mapReady = new Promise((res) => map.once("load", res));
@@ -145,18 +147,27 @@ async function init() {
   });
   map.addLayer({
     id: "tl-line", type: "line", source: "tl-sel",
-    paint: { "line-color": dayColorExpr(), "line-width": ["interpolate", ["linear"], ["zoom"], 7, 3, 13, 4.5] },
-    layout: { "line-cap": "round", "line-join": "round" },
+    // color baked into each feature (_color) — no expressions that can fail
+    paint: {
+      "line-color": ["get", "_color"],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 7, 3, 13, 4.5],
+      "line-dasharray": [2.4, 1.6],
+    },
+    layout: { "line-join": "round" },
   });
+  // labels live on a SEPARATE source: if the font CDN is unreachable the
+  // symbol tiles fail alone — the dashed lines above can never be affected
+  map.addSource("tl-lbl", { type: "geojson", data: emptyFC() });
   map.addLayer({
-    id: "tl-label", type: "symbol", source: "tl-sel",
+    id: "tl-label", type: "symbol", source: "tl-lbl",
     layout: {
       "symbol-placement": "line",
-      "text-field": ["get", "file"],
+      "text-field": ["concat", ["get", "day"], "  ·  ", ["get", "file"]],
       "text-size": 10.5,
       "text-font": ["Noto Sans Regular"],
+      "symbol-spacing": 400,
     },
-    paint: { "text-color": "#1d2b3d", "text-halo-color": "#fff", "text-halo-width": 1.3 },
+    paint: { "text-color": "#1d2b3d", "text-halo-color": "#fff", "text-halo-width": 1.4 },
   });
   map.on("click", "tl-line", (e) => {
     showLineInfo(e.features[0].properties);
@@ -171,10 +182,17 @@ async function init() {
     last.files.forEach((f) => state.runSel.add(last.day + "|" + f.file));
   }
 
+  $("#tl-toggle").addEventListener("change", (e) => {
+    state.showLines = e.target.checked;
+    $("#testline-panel").classList.toggle("off", !state.showLines);
+    applyAll();
+  });
+
   buildLayerList();
   buildBasemapList();
   buildTestlinePanel();
   applyAll();
+  zoomToNetwork(state.net, 0);
   $("#loading").style.display = "none";
 }
 
@@ -188,10 +206,11 @@ function colorRamp(field, stops) {
   return ["case", ["==", ["get", field], null], C.none, ramp];
 }
 
+/* red = bad, green = good; gray (C.none) stays clearly distinct for "no value" */
 const FRICTION_STOPS = [
-  [20, "#c0622f"], [40, "#e2b25c"], [50, "#e8e3d4"], [60, "#86b1da"], [80, "#1e62a8"]];
+  [20, "#d73027"], [40, "#f46d43"], [50, "#fee08b"], [60, "#a6d96a"], [80, "#1a9850"]];
 const DIFF_STOPS = [
-  [-25, "#b35806"], [-8, "#f1a340"], [0, "#f4f1ea"], [8, "#998ec3"], [25, "#542788"]];
+  [-25, "#d73027"], [-8, "#fdae61"], [0, "#ffffbf"], [8, "#a6d96a"], [25, "#1a9850"]];
 
 function paintFor(mode, layer, level) {
   if (mode === "MFV") return C.none;   // pending data
@@ -218,7 +237,7 @@ function legendFor(mode, layer) {
     FRICTION_STOPS.forEach(([v, c], i) => add(c,
       i === 0 ? `≤ ${v}` : i === FRICTION_STOPS.length - 1 ? `≥ ${v}` : String(v)));
     add(C.none, "No value yet");
-    rows.push(`<div class="legend-note">Friction number = floor(mean μ × 100), RFT 2026. Low values (orange) need attention.</div>`);
+    rows.push(`<div class="legend-note">Friction number = floor(mean μ × 100), RFT 2026. Red = low friction (bad), green = good.</div>`);
   } else if (layer === "sectioned") {
     add(C.accent, "Sectioned — friction calculated");
     add(C.none, "Not sectioned yet");
@@ -227,25 +246,18 @@ function legendFor(mode, layer) {
   } else if (layer === "d_friction") {
     DIFF_STOPS.forEach(([v, c]) => add(c, v > 0 ? `+${v}` : String(v)));
     add(C.none, "No 2026 value");
-    rows.push(`<div class="legend-note">Friction 2026 − Friction 2025. Purple = improved, orange = dropped.</div>`);
+    rows.push(`<div class="legend-note">Friction 2026 − Friction 2025. Green = improved, red = dropped.</div>`);
   }
   $("#legend").innerHTML = rows.join("");
 }
 
-function dayColorExpr() {
-  const expr = ["match", ["get", "day"]];
-  stats.days.forEach((d, i) => expr.push(d.day, DAY_COLORS[i % DAY_COLORS.length]));
-  expr.push("#555");
-  return expr;
-}
+const dayColor = (day) => DAY_COLORS[dayIndex(day) % DAY_COLORS.length];
 
 /* ===================== apply state ===================== */
 function featureFilter() {
   const f = ["all"];
-  if (state.net !== "ALL") {
-    const roads = Object.keys(stats.networks[state.net].by_road);
-    f.push(["in", ["get", "NETWORKID"], ["literal", roads]]);
-  }
+  const roads = Object.keys(stats.networks[state.net].by_road);
+  f.push(["in", ["get", "NETWORKID"], ["literal", roads]]);
   if (state.road) f.push(["==", ["get", "NETWORKID"], state.road]);
   return f;
 }
@@ -262,10 +274,14 @@ function applyAll() {
   map.setPaintProperty(state.level + "-fill", "fill-color", color);
   map.setPaintProperty(state.level + "-outline", "line-color", color);
 
-  map.getSource("tl-sel").setData({
+  const lineFC = {
     type: "FeatureCollection",
-    features: DATA.lines.features.filter((f) => state.runSel.has(f.properties.key)),
-  });
+    features: !state.showLines ? [] : DATA.lines.features
+      .filter((f) => state.runSel.has(f.properties.key))
+      .map((f) => ({ ...f, properties: { ...f.properties, _color: dayColor(f.properties.day) } })),
+  };
+  map.getSource("tl-sel").setData(lineFC);
+  map.getSource("tl-lbl").setData(lineFC);
   // keep test lines above every polygon layer, whatever else changed
   for (const id of ["tl-casing", "tl-line", "tl-label"])
     if (map.getLayer(id)) map.moveLayer(id);
@@ -321,18 +337,12 @@ $("#mode-toggle").addEventListener("click", (e) => {
 
 /* ===================== sidebar ===================== */
 function netTotals() {
-  let roads;
-  if (state.road) {
-    roads = GROUPS.filter((g) => stats.networks[g].by_road[state.road])
-      .map((g) => [g, state.road]);
-  } else if (state.net === "ALL") {
-    roads = GROUPS.flatMap((g) => Object.keys(stats.networks[g].by_road).map((r) => [g, r]));
-  } else {
-    roads = Object.keys(stats.networks[state.net].by_road).map((r) => [state.net, r]);
-  }
+  const roads = state.road ? [state.road]
+    : Object.keys(stats.networks[state.net].by_road);
   const t = { total: 0, coll: 0, sect: 0 };
-  for (const [g, r] of roads) {
-    const v = stats.networks[g].by_road[r];
+  for (const r of roads) {
+    const v = stats.networks[state.net].by_road[r];
+    if (!v) continue;
     t.total += v.total_mi; t.coll += v.collected_mi; t.sect += v.sectioned_mi;
   }
   return t;
@@ -355,22 +365,21 @@ function renderStats() {
   const t = netTotals();
   const pctColl = t.total ? (100 * Math.min(t.coll, t.total)) / t.total : 0;
   const pctSect = t.total ? (100 * t.sect) / t.total : 0;
-  $("#gauge-title").textContent =
-    (state.road || (state.net === "ALL" ? "All networks" : state.net)) + " progress";
+  $("#gauge-title").textContent = (state.road || state.net) + " progress";
   gauge("#gauge-collected", pctColl, C.amber);
   gauge("#gauge-sectioned", pctSect, C.accent);
   $("#miles-table").innerHTML = `
     <tr><td>Total network</td><td>${t.total.toFixed(1)} mi</td></tr>
     <tr><td>Collected</td><td>${t.coll.toFixed(1)} mi</td></tr>
     <tr><td>Sectioned</td><td>${t.sect.toFixed(1)} mi</td></tr>` +
-    (!state.road && state.net === "ALL"
-      ? `<tr><td>Driven off-network (ramps etc.)</td><td>${stats.line_off_network_mi.toFixed(1)} mi</td></tr>` : "");
+    (!state.road
+      ? `<tr><td>Off-network, all runs (ramps etc.)</td><td>${stats.line_off_network_mi.toFixed(1)} mi</td></tr>` : "");
   renderRoadBars();
 }
 
 function renderRoadBars() {
   const box = $("#road-bars");
-  const groups = state.net === "ALL" ? GROUPS : [state.net];
+  const groups = [state.net];
   let html = "";
   for (const g of groups) {
     for (const [r, v] of Object.entries(stats.networks[g].by_road)) {
@@ -401,22 +410,28 @@ function renderRoadBars() {
     el.addEventListener("click", () => {
       state.road = state.road === el.dataset.road ? "" : el.dataset.road;
       applyAll();
-      if (state.road) zoomToRoad(state.road);
-      else map.flyTo({ center: [-66.3, 18.35], zoom: 9 });
+      if (state.road) zoomToRoads([state.road]);
+      else zoomToNetwork(state.net);
     }));
 }
 
-function zoomToRoad(road) {
+function zoomToRoads(roadList, duration) {
+  const set = new Set(roadList);
   let minX = 180, minY = 90, maxX = -180, maxY = -90, found = false;
   for (const f of DATA[state.level].features) {
-    if (f.properties.NETWORKID !== road || !f.geometry) continue;
+    if (!set.has(f.properties.NETWORKID) || !f.geometry) continue;
     found = true;
     walkCoords(f.geometry.coordinates, (x, y) => {
       if (x < minX) minX = x; if (x > maxX) maxX = x;
       if (y < minY) minY = y; if (y > maxY) maxY = y;
     });
   }
-  if (found) map.fitBounds([[minX, minY], [maxX, maxY]], { padding: 60 });
+  if (found) map.fitBounds([[minX, minY], [maxX, maxY]],
+    { padding: 60, duration: duration === undefined ? 1200 : duration });
+}
+
+function zoomToNetwork(net, duration) {
+  zoomToRoads(Object.keys(stats.networks[net].by_road), duration);
 }
 
 function walkCoords(c, cb) {
@@ -571,46 +586,64 @@ $("#info-close").addEventListener("click", () => $("#info-panel").classList.remo
 
 function showFeatureInfo(p) {
   const isSeg = state.level === "segments";
+  const mfv = state.mode === "MFV";
   const fric = isSeg ? p.friction : p.friction_aw;
   const chips = [];
   const chip = (k, v) => { if (v !== null && v !== undefined && v !== "") chips.push(`<span class="chip">${k} <b>${v}</b></span>`); };
   chip("SecID", p.SecID);
   chip("Pavement", p.PavementTy);
   chip("Length", isSeg ? (p.seg_len_mi != null ? p.seg_len_mi.toFixed(3) + " mi" : null) : p.length_mi + " mi");
-  if (isSeg) chip("Status", p.section_status || "not sectioned");
-  else chip("Sectioned", p.pct_sectioned + "% · " + p.n_friction + "/" + p.n_segments + " segments");
-  chip("Friction 2025", p.Skid_2025);
-  chip("Friction 2026", fric ?? "—");
-  chip("Δ Friction (26−25)", p.d_friction);
+  if (mfv) {
+    // MFV/IRI collection has not started — show IRI history, 2026 stays null
+    chip("IRI 2025", p.IRI_2025);
+    chip("IRI 2026", "—");
+  } else {
+    if (isSeg) chip("Status", p.section_status || "not sectioned");
+    else chip("Sectioned", p.pct_sectioned + "% · " + p.n_friction + "/" + p.n_segments + " segments");
+    chip("Friction 2025", p.Skid_2025);
+    chip("Friction 2026", fric ?? "—");
+    chip("Δ Friction (26−25)", p.d_friction);
+  }
 
-  // metadata — label over value, flowing into compact columns
+  // metadata — label over value, compact columns (RFT collection metadata)
   const meta = [];
-  const m = (k, v) => { if (v) meta.push(`<div class="m-item"><div class="m-k">${k}</div><div class="m-v">${v}</div></div>`); };
-  m("Test file", p.test_file);
-  m("Test date", p.test_date);
-  m("Friction calculation date", p.friction_date);
-  m("Section date", p.section_date);
+  if (!mfv) {
+    const m = (k, v) => { if (v) meta.push(`<div class="m-item"><div class="m-k">${k}</div><div class="m-v">${v}</div></div>`); };
+    m("Test file", p.test_file);
+    m("Test date", p.test_date);
+    m("Friction calculation date", p.friction_date);
+    m("Section date", p.section_date);
+  }
+
+  // PRTR has no 2021 history — omit that column entirely when absent
+  const has21 = ("IRI_2021" in p) || ("Skid_2021" in p) || ("PCI_2021" in p);
+  const yrs = (entries) => has21 ? entries : entries.filter((e) => e.label !== "2021");
 
   const charts = [
-    { title: "IRI (m/km)", entries: [
+    { title: "IRI (m/km)", entries: yrs([
       { label: "2021", value: p.IRI_2021 ?? null },
       { label: "2024", value: p.IRI_2024 ?? null },
       { label: "2025", value: p.IRI_2025 ?? null },
-      { label: "2026", value: null }], accent: false },
-    { title: "Friction", entries: [
+      { label: "2026", value: null }]), accent: mfv },
+  ];
+  if (!mfv) charts.push(
+    { title: "Friction", entries: yrs([
       { label: "2021", value: p.Skid_2021 ?? null },
       { label: "2024", value: p.Skid_2024 ?? null },
       { label: "2025", value: p.Skid_2025 ?? null },
-      { label: "2026", value: fric ?? null }], accent: true },
-    { title: "PCI", entries: [
+      { label: "2026", value: fric ?? null }]), accent: true });
+  charts.push(
+    { title: "PCI", entries: yrs([
       { label: "2021", value: p.PCI_2021 ?? null },
       { label: "2024", value: p.PCI_2024 ?? null },
-      { label: "2025", value: p.PCI_2025 ?? null }], accent: false },
-  ];
+      { label: "2025", value: p.PCI_2025 ?? null }]), accent: false });
+
   showPanel(`
-    <div class="ip-title">${p.NETWORKID} · ${p.SECTIONID || p.SecCode || p.SecID}${isSeg ? " · segment " + p.segment_id : ""}</div>
-    <div class="ip-sub">${p.PID || ""}</div>
-    <div class="ip-chips">${chips.join("")}</div>
+    <div class="ip-head">
+      <div class="ip-title">${p.NETWORKID} · ${p.SECTIONID || p.SecCode || p.SecID}${isSeg ? " · segment " + p.segment_id : ""}</div>
+      <div class="ip-sub">${p.PID || ""}</div>
+      <div class="ip-chips">${chips.join("")}</div>
+    </div>
     ${meta.length ? `<div class="ip-meta">${meta.join("")}</div>` : ""}
     <div class="ip-charts">${charts.map((c) =>
       `<div class="chart-box"><div class="ch-title">${c.title}</div>${barChart(c.entries, c.accent)}</div>`).join("")}
@@ -623,11 +656,13 @@ function showLineInfo(p) {
   const rows = routes.map((r) =>
     `<tr><td>${r.route} (${r.network})</td><td>${r.mi} mi on network</td></tr>`).join("");
   showPanel(`
-    <div class="ip-title">${p.file}</div>
-    <div class="ip-sub">Test run · ${p.day}</div>
-    <div class="ip-chips">
-      <span class="chip">Driven <b>${p.length_mi} mi</b></span>
-      ${routes.length ? "" : '<span class="chip">off-network (ramp / connector)</span>'}
+    <div class="ip-head">
+      <div class="ip-title">${p.file}</div>
+      <div class="ip-sub">Test run · ${p.day}</div>
+      <div class="ip-chips">
+        <span class="chip">Driven <b>${p.length_mi} mi</b></span>
+        ${routes.length ? "" : '<span class="chip">off-network (ramp / connector)</span>'}
+      </div>
     </div>
     ${rows ? `<table class="ip-table">${rows}</table>` : ""}`);
 }
@@ -638,11 +673,9 @@ $("#network-toggle").addEventListener("click", (e) => {
   $("#network-toggle .active").classList.remove("active");
   e.target.classList.add("active");
   state.net = e.target.dataset.net;
-  if (state.road) {
-    const ok = state.net === "ALL" || stats.networks[state.net].by_road[state.road];
-    if (!ok) state.road = "";
-  }
+  if (state.road && !stats.networks[state.net].by_road[state.road]) state.road = "";
   applyAll();
+  zoomToNetwork(state.net);
 });
 
 $("#level-toggle").addEventListener("click", (e) => {

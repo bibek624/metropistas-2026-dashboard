@@ -23,10 +23,12 @@ header h1 { font-size: 15px; margin: 0 6px 0 0; font-weight: 600; letter-spacing
 
 /* ---------- layout ---------- */
 #layout { flex: 1; display: flex; min-height: 0; }
-#sidebar {
-  width: 308px; overflow-y: auto; padding: 12px;
+#sidebar, #rightbar {
+  overflow-y: auto; padding: 12px;
   display: flex; flex-direction: column; gap: 12px;
 }
+#sidebar { width: 308px; }
+#rightbar { width: 252px; }
 #map { flex: 1; position: relative; }
 
 .card {
@@ -69,6 +71,28 @@ details.card[open] summary { margin-bottom: 10px; }
 .rb-labels { display: flex; gap: 12px; font-size: 10.5px; color: #5b6b7e; margin-top: 4px; }
 .rb-labels .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
 
+/* ---------- right panel: layer / basemap / test-line lists ---------- */
+#layer-list label, #basemap-list label {
+  display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #1d2b3d;
+  padding: 6px 8px; border-radius: 7px; cursor: pointer;
+}
+#layer-list label:hover, #basemap-list label:hover { background: #f2f6fb; }
+#layer-list label.checked, #basemap-list label.checked { background: #e9f2fd; font-weight: 600; }
+#layer-list input, #basemap-list input { accent-color: #2e86de; }
+#layer-list .pending { color: #9aa7b5; font-weight: 400; font-size: 10.5px; margin-left: auto; }
+#legend { font-size: 11.5px; border-top: 1px solid #eef1f5; margin-top: 10px; padding-top: 9px; }
+.legend-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; color: #44546a; }
+.legend-swatch { width: 16px; height: 11px; border-radius: 3px; border: 1px solid #0001; flex: none; }
+.legend-note { color: #8a97a6; font-size: 10.5px; margin-top: 6px; line-height: 1.45; }
+
+.tl-switch {
+  display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: #1d2b3d;
+  cursor: pointer; padding: 2px 0 6px; user-select: none;
+}
+.tl-switch input { accent-color: #2e86de; }
+.tl-switch .hint { margin-left: auto; }
+#testline-panel.off { display: none; }
+
 /* ---------- multi-select dropdowns ---------- */
 .msdd { position: relative; margin-bottom: 8px; }
 .msdd-label { font-size: 11px; color: #8a97a6; margin: 8px 0 4px; }
@@ -92,53 +116,33 @@ details.card[open] summary { margin-bottom: 10px; }
 .msdd-panel .opt-meta { margin-left: auto; color: #9aa7b5; font-size: 10px; white-space: nowrap; padding-left: 8px; }
 .day-swatch { width: 13px; height: 4px; border-radius: 2px; display: inline-block; flex: none; }
 
-/* ---------- layer box (right of map) ---------- */
-#layer-box {
-  position: absolute; top: 12px; right: 52px; z-index: 5; width: 230px;
-  background: #fff; border-radius: 12px; box-shadow: 0 2px 10px #0d203a26;
-  padding: 12px 14px;
-}
-#layer-box .lb-title { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #5b6b7e; font-weight: 600; margin-bottom: 8px; }
-#layer-list label, #basemap-list label {
-  display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #1d2b3d;
-  padding: 6px 8px; border-radius: 7px; cursor: pointer;
-}
-#layer-list label:hover, #basemap-list label:hover { background: #f2f6fb; }
-#layer-list label.checked, #basemap-list label.checked { background: #e9f2fd; font-weight: 600; }
-#layer-list input, #basemap-list input { accent-color: #2e86de; }
-#layer-list .pending { color: #9aa7b5; font-weight: 400; font-size: 10.5px; margin-left: auto; }
-.lb-title.lb-base { border-top: 1px solid #eef1f5; margin-top: 10px; padding-top: 9px; }
-#legend { font-size: 11.5px; border-top: 1px solid #eef1f5; margin-top: 10px; padding-top: 9px; }
-.legend-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; color: #44546a; }
-.legend-swatch { width: 16px; height: 11px; border-radius: 3px; border: 1px solid #0001; flex: none; }
-.legend-note { color: #8a97a6; font-size: 10.5px; margin-top: 6px; line-height: 1.45; }
-
-/* ---------- info panel (bottom-right of map, sized to its content) ---------- */
+/* ---------- info panel: bottom strip over the map, horizontal, no scrolling ---------- */
 #info-panel {
-  position: absolute; right: 12px; bottom: 28px; z-index: 6;
-  width: max-content; max-width: min(700px, calc(100% - 24px));
+  position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 6;
   background: #fff; border-radius: 14px; box-shadow: 0 4px 24px #0d203a33;
-  padding: 14px 38px 14px 18px; display: none; max-height: 320px; overflow-y: auto;
+  padding: 13px 40px 13px 18px; display: none;
 }
 #info-panel.open { display: block; }
-.ip-meta {
-  display: grid; grid-template-columns: repeat(2, max-content);
-  gap: 7px 30px; margin-bottom: 12px;
-}
-.ip-meta .m-k { font-size: 10px; color: #8a97a6; text-transform: uppercase; letter-spacing: .04em; }
-.ip-meta .m-v { font-size: 12px; color: #1d2b3d; font-weight: 600; }
+#info-content { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
 #info-close {
   position: absolute; top: 10px; right: 12px; border: none; background: #eef1f5;
   border-radius: 50%; width: 24px; height: 24px; cursor: pointer; color: #5b6b7e; font-size: 11px;
 }
 #info-close:hover { background: #dde4ec; }
-.ip-title { font-size: 14px; font-weight: 600; color: #1d2b3d; margin-bottom: 2px; }
-.ip-sub { font-size: 11.5px; color: #8a97a6; margin-bottom: 10px; }
-.ip-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.chip { background: #f2f6fb; border-radius: 7px; padding: 4px 10px; font-size: 11.5px; color: #44546a; }
+.ip-head { max-width: 340px; }
+.ip-title { font-size: 13.5px; font-weight: 600; color: #1d2b3d; margin-bottom: 2px; }
+.ip-sub { font-size: 11px; color: #8a97a6; margin-bottom: 8px; }
+.ip-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { background: #f2f6fb; border-radius: 7px; padding: 3px 9px; font-size: 11px; color: #44546a; }
 .chip b { color: #1d2b3d; }
-.ip-charts { display: flex; gap: 22px; flex-wrap: wrap; }
-.chart-box .ch-title { font-size: 11px; color: #5b6b7e; font-weight: 600; margin-bottom: 3px; }
+.ip-meta {
+  display: grid; grid-template-columns: repeat(2, max-content);
+  gap: 8px 28px; padding-top: 2px;
+}
+.ip-meta .m-k { font-size: 10px; color: #8a97a6; text-transform: uppercase; letter-spacing: .04em; }
+.ip-meta .m-v { font-size: 12px; color: #1d2b3d; font-weight: 600; }
+.ip-charts { display: flex; gap: 24px; flex-wrap: nowrap; }
+.chart-box .ch-title { font-size: 11px; color: #5b6b7e; font-weight: 600; margin-bottom: 2px; }
 .ip-table { font-size: 12px; border-collapse: collapse; }
 .ip-table td { padding: 2px 12px 2px 0; color: #44546a; }
 .ip-table td:first-child { color: #8a97a6; }
