@@ -1,0 +1,5 @@
+logs/*.log
+logs/etl_*.log
+logs/dashboard_check.png
+__pycache__/
+*.pyc

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metropistas 2026 — Data Collection Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Metropistas 2026 · Data Collection</h1>
+  <div class="ctrl-group" id="network-toggle">
+    <button data-net="ALL" class="active">All</button>
+    <button data-net="AMPR">AMPR</button>
+    <button data-net="PRTR">PRTR</button>
+  </div>
+  <select id="road-select" title="Road (network ID)">
+    <option value="">All roads</option>
+  </select>
+  <div class="ctrl-group" id="level-toggle">
+    <button data-level="segments" class="active">0.05-mi segments</button>
+    <button data-level="sections" title="Original .sec sections">Sections</button>
+  </div>
+  <select id="view-select" title="Map view">
+    <option value="friction">Friction 2026 (RFT)</option>
+    <option value="collected">Collected vs not</option>
+    <option value="sectioned">Sectioned vs not</option>
+    <option value="d_skid">Δ Friction 2026 − Skid 2025</option>
+    <option value="d_iri">Δ IRI 2026 − 2025 (MFV)</option>
+  </select>
+  <span id="updated"></span>
+</header>
+
+<div id="layout">
+  <aside id="sidebar">
+    <section>
+      <h2 id="gauge-title">Overall progress</h2>
+      <div id="gauges">
+        <div class="gauge-box"><svg id="gauge-collected" viewBox="0 0 200 115"></svg><div class="gauge-label">Collected</div></div>
+        <div class="gauge-box"><svg id="gauge-sectioned" viewBox="0 0 200 115"></svg><div class="gauge-label">Sectioned</div></div>
+      </div>
+      <table id="miles-table"></table>
+    </section>
+    <section>
+      <h2>By road</h2>
+      <div id="road-bars"></div>
+    </section>
+    <section>
+      <h2>Test lines <span class="hint">(overlay days, expand for runs)</span></h2>
+      <div id="testline-days"></div>
+    </section>
+    <section id="legend-box">
+      <h2>Legend</h2>
+      <div id="legend"></div>
+    </section>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<div id="loading">Loading data…</div>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

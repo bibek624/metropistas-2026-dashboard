@@ -1,0 +1,287 @@
+{
+  "AMPR_2026_Inventory": {
+    "by_networkid": {
+      "MTSPR5": {
+        "count": 42,
+        "length": 77439.30000000003,
+        "area": 929271.5999999997,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 42,
+        "skid25_n": 42
+      },
+      "MTSPR22": {
+        "count": 405,
+        "length": 1372509.8,
+        "area": 16470129.600000009,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 405,
+        "skid25_n": 405
+      }
+    },
+    "n_secids": 447,
+    "statuses": {},
+    "pavement": {
+      "Asphalt": 376,
+      "PCC jointed": 71
+    }
+  },
+  "AMPR_2026_05_segments": {
+    "by_networkid": {
+      "MTSPR5": {
+        "count": 286,
+        "length": 928788.7999999986,
+        "area": 11145465.599999987,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 286,
+        "skid25_n": 286
+      },
+      "MTSPR22": {
+        "count": 5096,
+        "length": 61283667.59999987,
+        "area": 735404023.2000009,
+        "friction_n": 2375,
+        "sectioned_n": 3487,
+        "iri25_n": 5096,
+        "skid25_n": 5096
+      }
+    },
+    "n_secids": 447,
+    "statuses": {
+      "sectioned": 3475,
+      "no_points": 12
+    },
+    "pavement": {
+      "Asphalt": 3337,
+      "PCC jointed": 2045
+    }
+  },
+  "PRTR_2026_Inventory": {
+    "by_networkid": {
+      "MTSPR18": {
+        "count": 5,
+        "length": 18267.120000000003,
+        "area": 219205.44,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 5,
+        "skid25_n": 5
+      },
+      "MTSPR20": {
+        "count": 62,
+        "length": 208937.71999999997,
+        "area": 2507252.6400000006,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 62,
+        "skid25_n": 62
+      },
+      "MTSPR52": {
+        "count": 261,
+        "length": 1846647.1200000008,
+        "area": 22159765.439999983,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 261,
+        "skid25_n": 261
+      },
+      "MTSPR53A": {
+        "count": 106,
+        "length": 527190.28,
+        "area": 6326283.360000002,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 106,
+        "skid25_n": 106
+      },
+      "MTSPR66": {
+        "count": 67,
+        "length": 294464.73000000004,
+        "area": 3533576.7600000016,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 67,
+        "skid25_n": 67
+      },
+      "MTSPR53B": {
+        "count": 46,
+        "length": 217855.85,
+        "area": 2614270.1999999997,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 46,
+        "skid25_n": 46
+      }
+    },
+    "n_secids": 547,
+    "statuses": {},
+    "pavement": {
+      "Asphalt": 424,
+      "PCC jointed": 123
+    }
+  },
+  "PRTR_2026_05_segments": {
+    "by_networkid": {
+      "MTSPR18": {
+        "count": 68,
+        "length": 272187.5500000002,
+        "area": 3266250.599999999,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 68,
+        "skid25_n": 68
+      },
+      "MTSPR20": {
+        "count": 749,
+        "length": 10567692.079999955,
+        "area": 126812304.95999962,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 749,
+        "skid25_n": 749
+      },
+      "MTSPR52": {
+        "count": 6719,
+        "length": 177906828.72999495,
+        "area": 2134881944.7600133,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 6719,
+        "skid25_n": 6719
+      },
+      "MTSPR53A": {
+        "count": 1986,
+        "length": 44862856.32999981,
+        "area": 538354275.96,
+        "friction_n": 1755,
+        "sectioned_n": 1758,
+        "iri25_n": 1986,
+        "skid25_n": 1986
+      },
+      "MTSPR66": {
+        "count": 1068,
+        "length": 14865560.670000046,
+        "area": 178386728.04000008,
+        "friction_n": 403,
+        "sectioned_n": 415,
+        "iri25_n": 1068,
+        "skid25_n": 1068
+      },
+      "MTSPR53B": {
+        "count": 827,
+        "length": 24332027.30999988,
+        "area": 291984327.72000057,
+        "friction_n": 0,
+        "sectioned_n": 0,
+        "iri25_n": 827,
+        "skid25_n": 827
+      }
+    },
+    "n_secids": 547,
+    "statuses": {
+      "sectioned": 2122,
+      "manually sectioned": 47,
+      "no_points": 4
+    },
+    "pavement": {
+      "Asphalt": 6107,
+      "PCC jointed": 5310
+    }
+  },
+  "test_lines_m": {
+    "TEST_20260603_Line": {
+      "PR66_EB_LN1_0.slf": 19480.7
+    },
+    "TEST_20260604_Line": {
+      "PR53A_NB_LN2_0.slf": 278.8,
+      "PR53A_NB_LN2_1.slf": 11372.1,
+      "PR53A_NB_LN2_2.slf": 28693.5,
+      "PR53A_SB_LN2_0.slf": 23545.9,
+      "PR53A_SB_LN2_1.slf": 16637.0,
+      "PR66_WB_LN2_0.slf": 20009.5
+    },
+    "TEST_20260605_Line": {
+      "PR53A_NB_LN1_0.slf": 43809.7,
+      "PR53A_NB_Off_Ramp_02_LN1_0.slf": 240.3,
+      "PR53A_NB_Off_Ramp_02_LN1_1.slf": 526.4,
+      "PR53A_NB_On_Ramp_01_LN1_0.slf": 715.8,
+      "PR53A_SB_LN1_0.slf": 43817.1,
+      "PR53A_SB_Off_Ramp_08_LN1_0.slf": 410.8,
+      "PR53A_SB_Off_Ramp_10_LN1_0.slf": 392.1,
+      "PR53A_SB_Off_Ramp_11_LN1_0.slf": 255.2,
+      "PR53A_SB_Off_Ramp_11_LN1_1.slf": 510.9,
+      "PR53A_SB_On_Ramp_10_LN1_0.slf": 328.8,
+      "PR53A_SB_On_Ramp_13_LN1_To_PR53A_SB_Off_Ramp_12_LN1_0.slf": 941.7,
+      "PR53A_SB_On_Ramp_13_LN1_To_PR53A_SB_Off_Ramp_12_LN1_1.slf": 386.2,
+      "PR66_WB_LN0_0.slf": 611.7,
+      "PR66_WB_On_Ramp_01_LN1_0.slf": 423.1
+    },
+    "TEST_20260606_Line": {
+      "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_0.slf": 8817.5,
+      "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_1.slf": 23298.8,
+      "PR22 WB LN1 To To PR2 WB LN4_0.slf": 24206.7,
+      "PR22 WB LN1 To To PR2 WB LN4_1.slf": 28462.5,
+      "PR22_EB_LN2_To_PR694_Off_Ramp_0.slf": 322.7,
+      "PR22_EB_LN2_To_PR694_Off_Ramp_1.slf": 494.0
+    },
+    "TEST_20260607_Line": {
+      "PR167_EB_Off_Ramp_LN1_0.slf": 418.5,
+      "PR167_EB_Off_Ramp_LN1_1.slf": 430.3,
+      "PR167_EB_Off_Ramp_LN1_2.slf": 463.2,
+      "PR167_EB_Off_Ramp_LN1_3.slf": 404.5,
+      "PR167_WB_On_Ramp_LN2_0.slf": 568.2,
+      "PR18_NB_LN2_To_PR22_WB_LN1_0.slf": 3823.5,
+      "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_02_0.slf": 24695.1,
+      "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_03_0.slf": 6889.4,
+      "PR2_SB_LN4_To_PR24_NB_LN3_0.slf": 1373.2,
+      "PR22_DT_LN1_0.slf": 21789.0,
+      "PR22_DT_LN1_02_0.slf": 21121.6,
+      "PR22_DT_LN1_1.slf": 9101.7,
+      "PR22_EB_LN4_To_PR22_EB_LN4_0.slf": 1088.9,
+      "PR22_EB_LN4_To_PR22_EB_LN4_1.slf": 167.3,
+      "PR22_WB_LN2_To_WB_Toll_LN2_To_PR686_Off_Ramp_0.slf": 1273.9,
+      "PR22_WB_LN2_To_WB_Toll_LN2_To_PR686_Off_Ramp_1.slf": 402.2,
+      "PR22_WB_LN3_To_PR866_Off_Ramp_LN2_0.slf": 323.0,
+      "PR22_WB_LN4_To_PR5_Off_Ramp_LN1_0.slf": 410.0,
+      "PR24_SB_LN3_To_PR22_WB_LN5_0.slf": 294.4,
+      "PR866_EB_On_Ramp_LN1_To_PR22_EB_LN3_0.slf": 403.4,
+      "PR869_On_Ramp_To_PR22_WB_LN4_0.slf": 387.5
+    },
+    "TEST_20260608_Line": {
+      "PR2_EB_LN2_To_PR22_EB_LN3_0.slf": 13394.9,
+      "PR2_EB_LN2_To_PR22_EB_LN3_1.slf": 28256.4,
+      "PR22_WB_DT_Off_Ramp_01_LN1_0.slf": 8971.2,
+      "PR22_WB_LN1_To_PR2_WB_LN3_0.slf": 41631.7,
+      "PR659_NB_On_Ramp_LN1_To_PR22_EB_LN4_0.slf": 14221.8
+    },
+    "TEST_20260609_Line": {
+      "Ave_PR_865_On_Ramp_LN1_To_PR22_WB_LN3_0.slf": 204.4,
+      "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_0.slf": 1968.6,
+      "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_1.slf": 4133.2,
+      "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_2.slf": 1080.7,
+      "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_3.slf": 3440.3,
+      "PR165_WB_On_Ramp_To_PR22_WB_LN3_To_Off_Ramp_0.slf": 1723.6,
+      "PR2_EB_LN2_To_PR22_EB_LN3_0.slf": 2654.5,
+      "PR2_EB_LN2_To_PR22_EB_LN3_1.slf": 15958.5,
+      "PR2_EB_LN2_To_PR22_EB_LN3_2.slf": 8466.3,
+      "PR22_EB_DT_On_Ramp_01_LN1_0.slf": 4500.7,
+      "PR22_EB_LN4_To_PR24_EB_Off_Ramp_0.slf": 96.0,
+      "PR22_EB_LN4_To_PR24_EB_Off_Ramp_1.slf": 721.6,
+      "PR22_EB_LN4_To_PR24_EB_Off_Ramp_2.slf": 1123.7,
+      "PR22_EB_LN4_To_PR24_EB_Off_Ramp_3.slf": 744.8,
+      "PR22_EB_LN4_To_PR24_EB_Off_Ramp_4.slf": 173.3,
+      "PR22_WB_LN1_To_To_PR2_WB_LN4_0.slf": 22307.2,
+      "PR22_WB_LN2_To_PR22_WB_LN4_0.slf": 178.6,
+      "PR22_WB_LN2_To_PR22_WB_LN4_1.slf": 316.6,
+      "PR22_WB_LN3_To_PR165_SB_LN1_0.slf": 9709.9,
+      "PR22_WB_LN3_To_PR22_WB_LN3_0.slf": 1160.5,
+      "PR22_WB_LN3_To_PR22_WB_LN3_1.slf": 322.6,
+      "PR22_WB_LN4_To_Ave_De_Diego_Off_Ramp_0.slf": 306.7,
+      "PR22_WB_LN4_To_Ave_De_Diego_Off_Ramp_1.slf": 670.3,
+      "PR22_WB_Toll_LN2_0.slf": 322.0,
+      "PR22_WB_Toll_LN2_1.slf": 226.4
+    }
+  }
+}

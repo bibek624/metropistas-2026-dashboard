@@ -1,0 +1,67 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; font-family: "Segoe UI", system-ui, sans-serif; }
+body { display: flex; flex-direction: column; }
+
+header {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 8px 14px; background: #15263d; color: #fff;
+}
+header h1 { font-size: 16px; margin: 0 18px 0 0; font-weight: 600; }
+#updated { margin-left: auto; font-size: 12px; color: #9fb3cc; }
+
+.ctrl-group { display: inline-flex; border: 1px solid #3d5573; border-radius: 6px; overflow: hidden; }
+.ctrl-group button {
+  background: #1e3a55; color: #cdd9e8; border: none;
+  padding: 6px 12px; cursor: pointer; font-size: 13px;
+}
+.ctrl-group button.active { background: #2e86de; color: #fff; }
+header select { padding: 6px 8px; border-radius: 6px; border: 1px solid #3d5573; background: #1e3a55; color: #fff; font-size: 13px; }
+
+#layout { flex: 1; display: flex; min-height: 0; }
+#sidebar {
+  width: 320px; overflow-y: auto; background: #f4f6f9; border-right: 1px solid #d6dde6;
+  padding: 10px 14px;
+}
+#sidebar h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #4a5a6d; margin: 14px 0 8px; }
+#sidebar .hint { font-weight: 400; text-transform: none; color: #8a99ab; font-size: 11px; }
+#map { flex: 1; }
+
+#gauges { display: flex; gap: 8px; }
+.gauge-box { flex: 1; text-align: center; }
+.gauge-box svg { width: 100%; }
+.gauge-label { font-size: 12px; color: #4a5a6d; margin-top: -6px; }
+
+#miles-table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 8px; }
+#miles-table td { padding: 3px 4px; border-bottom: 1px solid #e2e8ef; }
+#miles-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.road-bar { margin-bottom: 10px; cursor: pointer; }
+.road-bar .rb-head { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px; }
+.road-bar .rb-name { font-weight: 600; color: #2c3e50; }
+.road-bar .rb-track { height: 14px; background: #e2e8ef; border-radius: 7px; position: relative; overflow: hidden; }
+.road-bar .rb-coll { position: absolute; top: 0; left: 0; bottom: 0; background: #f5b041; }
+.road-bar .rb-sect { position: absolute; top: 0; left: 0; bottom: 0; background: #27ae60; }
+.road-bar.selected .rb-name { color: #2e86de; }
+
+.day-row { margin-bottom: 4px; font-size: 13px; }
+.day-row > label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.day-swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+.day-meta { color: #8a99ab; font-size: 11px; margin-left: auto; }
+.day-expand { background: none; border: none; cursor: pointer; color: #6b7c8f; font-size: 11px; padding: 0 4px; }
+.file-list { margin: 2px 0 6px 26px; display: none; }
+.file-list.open { display: block; }
+.file-list label { display: flex; gap: 5px; font-size: 11px; color: #4a5a6d; align-items: center; }
+.file-list .fl-mi { margin-left: auto; color: #8a99ab; }
+
+#legend { font-size: 12px; }
+.legend-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
+.legend-swatch { width: 18px; height: 12px; border-radius: 3px; border: 1px solid #0002; }
+.legend-note { color: #6b7c8f; font-size: 11px; margin-top: 6px; }
+
+#loading {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: #15263dcc; color: #fff; font-size: 18px; z-index: 99;
+}
+.maplibregl-popup-content { font-size: 12px; max-width: 280px; }
+.maplibregl-popup-content table td { padding: 1px 6px 1px 0; vertical-align: top; }
+.maplibregl-popup-content td:first-child { color: #6b7c8f; }
