@@ -1,5 +1,35 @@
 # Progress Log
 
+## 2026-06-12 — redesign (user feedback round 2)
+
+**Collected logic corrected** — collected is a network-level metric, not a per-segment one.
+- ETL now dissolves each NETWORKID's inventory polygons, buffers 15 m, and intersects every
+  test line against every road footprint. A run crossing several roads (PR2→PR22→PR18)
+  splits its mileage between them; off-network ramp/connector mileage (41.8 mi so far)
+  counts only to day totals. Per-run road breakdown stored in `routes`.
+- "Collected vs not" map layer removed (it duplicated sectioned); per-segment `collected`
+  prop dropped. Collected % gauge = intersected line-miles / road total. AMPR now 74.1%.
+- New numbers: MTSPR22 203.5/260 mi collected; MTSPR53A 94.8/99.9; MTSPR66 22.8/55.8.
+
+**UI redesign (Apple-ish progressive disclosure)**
+- RFT/MFV mode toggle moved to the header (primary control); map-layer box on the right is
+  now a single-select radio list with the legend underneath it (sidebar decluttered).
+- Sidebar = 3 cards: Progress (gauges + miles), Roads (collapsible), Test lines (collapsed
+  by default). Road bars back to overlapped single track — larger fill drawn first, smaller
+  on top — with "C collected x%" / "S sectioned x%" labels beneath.
+- Test lines: Days multi-select + ONE merged Runs multi-select across all selected days,
+  "[MM-DD]" prefix when several days are selected. No more per-day dropdown explosion.
+- Popups replaced by a bottom info panel over the map (sidebar untouched): chips + mini
+  bar charts for IRI (21/24/25/26), Skid/Friction (21/24/25/26), Rutting (21/24/25).
+  ETL exports the history columns (schema-adaptive). Test-line clicks show run info +
+  per-road mileage there too.
+- Palette: gray = no data, blue = sectioned/positive, amber = collected; friction ramp
+  orange→sand→blue; Δ layer PuOr. No red/green binaries.
+- Visibility/perf: color-matched outline layer with zoom-interpolated width (roads readable
+  zoomed out), geojson tolerance 0.6, test lines drawn from a dedicated source via setData
+  (fixes invisible test lines) with white casing + day colors.
+
+
 ## 2026-06-12 — UI revision (user feedback round 1)
 
 - **RFT / MFV mode toggle** + single-select layer dropdown moved into a floating

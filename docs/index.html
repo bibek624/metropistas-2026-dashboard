@@ -9,7 +9,11 @@
 </head>
 <body>
 <header>
-  <h1>Metropistas 2026 · Data Collection</h1>
+  <h1>Metropistas 2026</h1>
+  <div class="ctrl-group primary" id="mode-toggle">
+    <button data-mode="RFT" class="active">RFT · Friction</button>
+    <button data-mode="MFV">MFV · IRI</button>
+  </div>
   <div class="ctrl-group" id="network-toggle">
     <button data-net="ALL" class="active">All</button>
     <button data-net="AMPR">AMPR</button>
@@ -24,35 +28,35 @@
 
 <div id="layout">
   <aside id="sidebar">
-    <section>
-      <h2 id="gauge-title">Overall progress</h2>
+    <div class="card" id="progress-card">
+      <h2 id="gauge-title">Progress</h2>
       <div id="gauges">
         <div class="gauge-box"><svg id="gauge-collected" viewBox="0 0 200 115"></svg><div class="gauge-label">Collected</div></div>
         <div class="gauge-box"><svg id="gauge-sectioned" viewBox="0 0 200 115"></svg><div class="gauge-label">Sectioned</div></div>
       </div>
       <table id="miles-table"></table>
-    </section>
-    <section>
-      <h2>By road <span class="hint">— click a road to zoom</span></h2>
+    </div>
+
+    <details class="card" id="roads-card" open>
+      <summary>Roads <span class="hint">tap to zoom</span></summary>
       <div id="road-bars"></div>
-    </section>
-    <section>
-      <h2>Test lines</h2>
+    </details>
+
+    <details class="card" id="lines-card">
+      <summary>Test lines <span class="hint" id="lines-hint"></span></summary>
       <div id="testline-panel"></div>
-    </section>
-    <section id="legend-box">
-      <h2>Legend</h2>
-      <div id="legend"></div>
-    </section>
+    </details>
   </aside>
+
   <div id="map">
     <div id="layer-box">
-      <div class="lb-title">Map layer</div>
-      <div class="ctrl-group small" id="mode-toggle">
-        <button data-mode="RFT" class="active">RFT</button>
-        <button data-mode="MFV">MFV</button>
-      </div>
-      <select id="layer-select"></select>
+      <div class="lb-title">Layer</div>
+      <div id="layer-list"></div>
+      <div id="legend"></div>
+    </div>
+    <div id="info-panel">
+      <button id="info-close" title="Close">✕</button>
+      <div id="info-content"></div>
     </div>
   </div>
 </div>

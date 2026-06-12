@@ -1,97 +1,87 @@
 {
- "generated": "2026-06-12 13:51",
+ "generated": "2026-06-12 14:30",
  "networks": {
   "AMPR": {
    "by_road": {
     "MTSPR22": {
+     "group": "AMPR",
      "total_mi": 259.95,
      "sectioned_mi": 123.62,
-     "collected_seg_mi": 180.32,
      "n_segments": 5096,
      "n_friction": 2375,
-     "n_collected": 3486,
-     "collected_line_mi": 225.52
+     "collected_mi": 203.45
     },
     "MTSPR5": {
+     "group": "AMPR",
      "total_mi": 14.67,
      "sectioned_mi": 0.0,
-     "collected_seg_mi": 0.0,
      "n_segments": 286,
      "n_friction": 0,
-     "n_collected": 0,
-     "collected_line_mi": 0
+     "collected_mi": 0
     }
    },
    "total_mi": 274.62,
    "sectioned_mi": 123.62,
-   "collected_seg_mi": 180.32,
-   "collected_line_mi": 225.52,
+   "collected_mi": 203.45,
    "pct_sectioned": 45.0,
-   "pct_collected": 65.7
+   "pct_collected": 74.1
   },
   "PRTR": {
    "by_road": {
     "MTSPR18": {
+     "group": "PRTR",
      "total_mi": 3.46,
      "sectioned_mi": 0.0,
-     "collected_seg_mi": 0.0,
      "n_segments": 68,
      "n_friction": 0,
-     "n_collected": 0,
-     "collected_line_mi": 2.38
+     "collected_mi": 0
     },
     "MTSPR20": {
+     "group": "PRTR",
      "total_mi": 39.57,
      "sectioned_mi": 0.0,
-     "collected_seg_mi": 0.0,
      "n_segments": 749,
      "n_friction": 0,
-     "n_collected": 0,
-     "collected_line_mi": 0
+     "collected_mi": 0
     },
     "MTSPR52": {
+     "group": "PRTR",
      "total_mi": 349.74,
      "sectioned_mi": 0.0,
-     "collected_seg_mi": 0.0,
      "n_segments": 6719,
      "n_friction": 0,
-     "n_collected": 0,
-     "collected_line_mi": 0
+     "collected_mi": 0
     },
     "MTSPR53A": {
+     "group": "PRTR",
      "total_mi": 99.85,
      "sectioned_mi": 94.64,
-     "collected_seg_mi": 94.64,
      "n_segments": 1986,
      "n_friction": 1755,
-     "n_collected": 1755,
-     "collected_line_mi": 107.42
+     "collected_mi": 94.77
     },
     "MTSPR53B": {
+     "group": "PRTR",
      "total_mi": 41.26,
      "sectioned_mi": 0.0,
-     "collected_seg_mi": 0.0,
      "n_segments": 827,
      "n_friction": 0,
-     "n_collected": 0,
-     "collected_line_mi": 0
+     "collected_mi": 0
     },
     "MTSPR66": {
+     "group": "PRTR",
      "total_mi": 55.77,
      "sectioned_mi": 21.57,
-     "collected_seg_mi": 22.24,
      "n_segments": 1068,
      "n_friction": 403,
-     "n_collected": 414,
-     "collected_line_mi": 25.17
+     "collected_mi": 22.78
     }
    },
    "total_mi": 589.65,
    "sectioned_mi": 116.21,
-   "collected_seg_mi": 116.88,
-   "collected_line_mi": 134.97,
+   "collected_mi": 117.55,
    "pct_sectioned": 19.7,
-   "pct_collected": 19.8
+   "pct_collected": 19.9
   }
  },
  "days": [
@@ -103,8 +93,14 @@
     {
      "file": "PR66_EB_LN1_0.slf",
      "length_mi": 12.1,
-     "network": "PRTR",
-     "route": "MTSPR66"
+     "route": "MTSPR66",
+     "networks": [
+      {
+       "route": "MTSPR66",
+       "network": "PRTR",
+       "mi": 10.97
+      }
+     ]
     }
    ]
   },
@@ -116,38 +112,74 @@
     {
      "file": "PR53A_NB_LN2_0.slf",
      "length_mi": 0.17,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.17
+      }
+     ]
     },
     {
      "file": "PR53A_NB_LN2_1.slf",
      "length_mi": 7.07,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 6.46
+      }
+     ]
     },
     {
      "file": "PR53A_NB_LN2_2.slf",
      "length_mi": 17.83,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 15.75
+      }
+     ]
     },
     {
      "file": "PR53A_SB_LN2_0.slf",
      "length_mi": 14.63,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 13.12
+      }
+     ]
     },
     {
      "file": "PR53A_SB_LN2_1.slf",
      "length_mi": 10.34,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 9.5
+      }
+     ]
     },
     {
      "file": "PR66_WB_LN2_0.slf",
      "length_mi": 12.43,
-     "network": "PRTR",
-     "route": "MTSPR66"
+     "route": "MTSPR66",
+     "networks": [
+      {
+       "route": "MTSPR66",
+       "network": "PRTR",
+       "mi": 11.18
+      }
+     ]
     }
    ]
   },
@@ -159,86 +191,170 @@
     {
      "file": "PR53A_NB_LN1_0.slf",
      "length_mi": 27.22,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 23.44
+      }
+     ]
     },
     {
      "file": "PR53A_NB_Off_Ramp_02_LN1_0.slf",
      "length_mi": 0.15,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.15
+      }
+     ]
     },
     {
      "file": "PR53A_NB_Off_Ramp_02_LN1_1.slf",
      "length_mi": 0.33,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.33
+      }
+     ]
     },
     {
      "file": "PR53A_NB_On_Ramp_01_LN1_0.slf",
      "length_mi": 0.44,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.44
+      }
+     ]
     },
     {
      "file": "PR53A_SB_LN1_0.slf",
      "length_mi": 27.23,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 23.43
+      }
+     ]
     },
     {
      "file": "PR53A_SB_Off_Ramp_08_LN1_0.slf",
      "length_mi": 0.26,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.26
+      }
+     ]
     },
     {
      "file": "PR53A_SB_Off_Ramp_10_LN1_0.slf",
      "length_mi": 0.24,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.22
+      }
+     ]
     },
     {
      "file": "PR53A_SB_Off_Ramp_11_LN1_0.slf",
      "length_mi": 0.16,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.16
+      }
+     ]
     },
     {
      "file": "PR53A_SB_Off_Ramp_11_LN1_1.slf",
      "length_mi": 0.32,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.32
+      }
+     ]
     },
     {
      "file": "PR53A_SB_On_Ramp_10_LN1_0.slf",
      "length_mi": 0.2,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.2
+      }
+     ]
     },
     {
      "file": "PR53A_SB_On_Ramp_13_LN1_To_PR53A_SB_Off_Ramp_12_LN1_0.slf",
      "length_mi": 0.59,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.59
+      }
+     ]
     },
     {
      "file": "PR53A_SB_On_Ramp_13_LN1_To_PR53A_SB_Off_Ramp_12_LN1_1.slf",
      "length_mi": 0.24,
-     "network": "PRTR",
-     "route": "MTSPR53A"
+     "route": "MTSPR53A",
+     "networks": [
+      {
+       "route": "MTSPR53A",
+       "network": "PRTR",
+       "mi": 0.24
+      }
+     ]
     },
     {
      "file": "PR66_WB_LN0_0.slf",
      "length_mi": 0.38,
-     "network": "PRTR",
-     "route": "MTSPR66"
+     "route": "MTSPR66",
+     "networks": [
+      {
+       "route": "MTSPR66",
+       "network": "PRTR",
+       "mi": 0.37
+      }
+     ]
     },
     {
      "file": "PR66_WB_On_Ramp_01_LN1_0.slf",
      "length_mi": 0.26,
-     "network": "PRTR",
-     "route": "MTSPR66"
+     "route": "MTSPR66",
+     "networks": [
+      {
+       "route": "MTSPR66",
+       "network": "PRTR",
+       "mi": 0.26
+      }
+     ]
     }
    ]
   },
@@ -250,38 +366,74 @@
     {
      "file": "PR22 WB LN1 To To PR2 WB LN4_0.slf",
      "length_mi": 15.04,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 12.29
+      }
+     ]
     },
     {
      "file": "PR22 WB LN1 To To PR2 WB LN4_1.slf",
      "length_mi": 17.69,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 16.5
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN2_To_PR694_Off_Ramp_0.slf",
      "length_mi": 0.2,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.2
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN2_To_PR694_Off_Ramp_1.slf",
      "length_mi": 0.31,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.31
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_0.slf",
      "length_mi": 5.48,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 4.54
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_1.slf",
      "length_mi": 14.48,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 12.72
+      }
+     ]
     }
    ]
   },
@@ -293,128 +445,254 @@
     {
      "file": "PR167_EB_Off_Ramp_LN1_0.slf",
      "length_mi": 0.26,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.26
+      }
+     ]
     },
     {
      "file": "PR167_EB_Off_Ramp_LN1_1.slf",
      "length_mi": 0.27,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.27
+      }
+     ]
     },
     {
      "file": "PR167_EB_Off_Ramp_LN1_2.slf",
      "length_mi": 0.29,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.29
+      }
+     ]
     },
     {
      "file": "PR167_EB_Off_Ramp_LN1_3.slf",
      "length_mi": 0.25,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.25
+      }
+     ]
     },
     {
      "file": "PR167_WB_On_Ramp_LN2_0.slf",
      "length_mi": 0.35,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.35
+      }
+     ]
     },
     {
      "file": "PR18_NB_LN2_To_PR22_WB_LN1_0.slf",
      "length_mi": 2.38,
-     "network": "PRTR",
-     "route": "MTSPR18"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 2.26
+      }
+     ]
     },
     {
      "file": "PR22_DT_LN1_0.slf",
      "length_mi": 13.54,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 11.93
+      }
+     ]
     },
     {
      "file": "PR22_DT_LN1_02_0.slf",
      "length_mi": 13.12,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 12.28
+      }
+     ]
     },
     {
      "file": "PR22_DT_LN1_1.slf",
      "length_mi": 5.66,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 4.76
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR22_EB_LN4_0.slf",
      "length_mi": 0.68,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.66
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR22_EB_LN4_1.slf",
      "length_mi": 0.1,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.1
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN2_To_WB_Toll_LN2_To_PR686_Off_Ramp_0.slf",
      "length_mi": 0.79,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.79
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN2_To_WB_Toll_LN2_To_PR686_Off_Ramp_1.slf",
      "length_mi": 0.25,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.25
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN3_To_PR866_Off_Ramp_LN2_0.slf",
      "length_mi": 0.2,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.2
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN4_To_PR5_Off_Ramp_LN1_0.slf",
      "length_mi": 0.25,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.25
+      }
+     ]
     },
     {
      "file": "PR24_SB_LN3_To_PR22_WB_LN5_0.slf",
      "length_mi": 0.18,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.18
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_02_0.slf",
      "length_mi": 15.34,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 13.62
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5_03_0.slf",
      "length_mi": 4.28,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 4.08
+      }
+     ]
     },
     {
      "file": "PR2_SB_LN4_To_PR24_NB_LN3_0.slf",
      "length_mi": 0.85,
-     "network": null,
-     "route": null
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.75
+      }
+     ]
     },
     {
      "file": "PR866_EB_On_Ramp_LN1_To_PR22_EB_LN3_0.slf",
      "length_mi": 0.25,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.25
+      }
+     ]
     },
     {
      "file": "PR869_On_Ramp_To_PR22_WB_LN4_0.slf",
      "length_mi": 0.24,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.24
+      }
+     ]
     }
    ]
   },
@@ -426,32 +704,62 @@
     {
      "file": "PR22_WB_DT_Off_Ramp_01_LN1_0.slf",
      "length_mi": 5.57,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 5.49
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN1_To_PR2_WB_LN3_0.slf",
      "length_mi": 25.87,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 23.05
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN2_To_PR22_EB_LN3_0.slf",
      "length_mi": 8.32,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 7.28
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN2_To_PR22_EB_LN3_1.slf",
      "length_mi": 17.56,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 14.43
+      }
+     ]
     },
     {
      "file": "PR659_NB_On_Ramp_LN1_To_PR22_EB_LN4_0.slf",
      "length_mi": 8.84,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 7.6
+      }
+     ]
     }
    ]
   },
@@ -463,161 +771,305 @@
     {
      "file": "Ave_PR_865_On_Ramp_LN1_To_PR22_WB_LN3_0.slf",
      "length_mi": 0.13,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.13
+      }
+     ]
     },
     {
      "file": "PR165_WB_On_Ramp_To_PR22_WB_LN3_To_Off_Ramp_0.slf",
      "length_mi": 1.07,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.29
+      }
+     ]
     },
     {
      "file": "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_0.slf",
      "length_mi": 1.22,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.98
+      }
+     ]
     },
     {
      "file": "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_1.slf",
      "length_mi": 2.57,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 2.46
+      }
+     ]
     },
     {
      "file": "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_2.slf",
      "length_mi": 0.67,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.67
+      }
+     ]
     },
     {
      "file": "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1_3.slf",
      "length_mi": 2.14,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 1.8
+      }
+     ]
     },
     {
      "file": "PR22_EB_DT_On_Ramp_01_LN1_0.slf",
      "length_mi": 2.8,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 2.0
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp_0.slf",
      "length_mi": 0.06,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.06
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp_1.slf",
      "length_mi": 0.45,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.45
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp_2.slf",
      "length_mi": 0.7,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.69
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp_3.slf",
      "length_mi": 0.46,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.46
+      }
+     ]
     },
     {
      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp_4.slf",
      "length_mi": 0.11,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": null,
+     "networks": []
     },
     {
      "file": "PR22_WB_LN1_To_To_PR2_WB_LN4_0.slf",
      "length_mi": 13.86,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 12.14
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN2_To_PR22_WB_LN4_0.slf",
      "length_mi": 0.11,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.11
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN2_To_PR22_WB_LN4_1.slf",
      "length_mi": 0.2,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.2
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN3_To_PR165_SB_LN1_0.slf",
      "length_mi": 6.03,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 5.41
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN3_To_PR22_WB_LN3_0.slf",
      "length_mi": 0.72,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.69
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN3_To_PR22_WB_LN3_1.slf",
      "length_mi": 0.2,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.18
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN4_To_Ave_De_Diego_Off_Ramp_0.slf",
      "length_mi": 0.19,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.14
+      }
+     ]
     },
     {
      "file": "PR22_WB_LN4_To_Ave_De_Diego_Off_Ramp_1.slf",
      "length_mi": 0.42,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.39
+      }
+     ]
     },
     {
      "file": "PR22_WB_Toll_LN2_0.slf",
      "length_mi": 0.2,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.2
+      }
+     ]
     },
     {
      "file": "PR22_WB_Toll_LN2_1.slf",
      "length_mi": 0.14,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 0.14
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN2_To_PR22_EB_LN3_0.slf",
      "length_mi": 1.65,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 1.64
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN2_To_PR22_EB_LN3_1.slf",
      "length_mi": 9.92,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 8.75
+      }
+     ]
     },
     {
      "file": "PR2_EB_LN2_To_PR22_EB_LN3_2.slf",
      "length_mi": 5.26,
-     "network": "AMPR",
-     "route": "MTSPR22"
+     "route": "MTSPR22",
+     "networks": [
+      {
+       "route": "MTSPR22",
+       "network": "AMPR",
+       "mi": 5.04
+      }
+     ]
     }
    ]
   }
  ],
- "collected_line_total_mi": 362.76,
- "unattributed_line_mi": 2.27,
+ "line_total_mi": 362.76,
+ "line_on_network_mi": 321.0,
+ "line_off_network_mi": 41.76,
  "notes": {
-  "collected_seg_mi": "miles of 0.05-mi segments touched by sectioning (pt_count/status)",
-  "collected_line_mi": "test-line miles attributed to this road by FILE_NAME",
-  "sectioned_mi": "miles of segments with a 2026 friction value"
+  "collected_mi": "test-line miles intersecting the road's buffered inventory footprint (15.0 m); one run can feed several roads",
+  "sectioned_mi": "miles of 0.05-mi segments with a 2026 friction value (area-fraction x parent length)"
  }
 }

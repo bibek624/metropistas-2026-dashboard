@@ -9,8 +9,14 @@ Reads:
 Writes (to docs/data/):
   - segments_{AMPR,PRTR}.geojson   0.05-mi segments, WGS84, simplified
   - sections_{AMPR,PRTR}.geojson   original sections + area-weighted friction
-  - testlines.geojson              all daily runs, props: day, file, length_mi
+  - testlines.geojson              all daily runs, props: key, day, file, length_mi
   - stats.json                     progress metrics
+
+Collected length is computed by INTERSECTING each test line with a buffered
+dissolve of every road's inventory polygons (NETWORKID footprint) — one run can
+contribute miles to several roads (e.g. PR2 -> PR22 -> PR18 connector runs).
+Sectioned length comes from segments with a 2026 friction value.
+
 Run with ArcGIS Pro python (arcgispro-py3).
 """
 import arcpy
@@ -30,20 +36,15 @@ LOG_DIR = os.path.join(ROOT, "logs")
 
 SQFT_TO_SQM = 0.09290304
 FT_PER_MILE = 5280.0
+M_PER_MILE = 1609.344
+FOOTPRINT_BUFFER_M = 15.0   # tolerance for GPS offset of test lines vs lane polygons
 WGS84 = arcpy.SpatialReference(4326)
-UTM = arcpy.SpatialReference(32620)  # for metric lengths
+GROUPS = ("AMPR", "PRTR")
 
-# route token in FILE_NAME -> (group, NETWORKID)
-ROUTE_MAP = {
-    "22": ("AMPR", "MTSPR22"),
-    "5": ("AMPR", "MTSPR5"),
-    "52": ("PRTR", "MTSPR52"),
-    "53A": ("PRTR", "MTSPR53A"),
-    "53B": ("PRTR", "MTSPR53B"),
-    "66": ("PRTR", "MTSPR66"),
-    "18": ("PRTR", "MTSPR18"),
-    "20": ("PRTR", "MTSPR20"),
-}
+# year-history columns to carry into the web data when present
+HISTORY_FIELDS = ["IRI_2021", "IRI_2024", "IRI_2025",
+                  "Skid_2021", "Skid_2024", "Skid_2025",
+                  "Rut_2021", "Rut_2024", "Rut_2025"]
 
 _log_lines = []
 
@@ -63,7 +64,7 @@ def round_coords(obj, nd=6):
 
 
 def geom_to_geojson(shp, generalize_m=1.0):
-    """UTM/any geometry -> generalized -> WGS84 geojson geometry dict."""
+    """Geometry (any SR) -> generalized -> WGS84 geojson geometry dict."""
     if shp is None:
         return None
     try:
@@ -84,40 +85,36 @@ def write_geojson(path, features):
 
 
 def export_network(group):
-    """Export segments + sections for one group; return stats dict."""
+    """Export segments + sections geojson for one group; return road stats."""
     seg_fc = os.path.join(INV_GDB, "{}_2026_05_segments".format(group))
     sec_fc = os.path.join(INV_GDB, "{}_2026_Inventory".format(group))
 
     # ---- segments ----
-    # PRTR has no SECTIONID column; fall back to SecCode for the display id.
     seg_names = {f.name for f in arcpy.ListFields(seg_fc)}
     sectionid_f = "SECTIONID" if "SECTIONID" in seg_names else "SecCode"
+    seg_hist = [f for f in HISTORY_FIELDS if f in seg_names]
     seg_fields = ["SecID", "PID", "segment_id", "NETWORKID", sectionid_f,
                   "PavementTy", "length", "area", "Shape_Area",
                   "pt_count", "section_status", "friction_section",
-                  "friction_date", "Skid_2025", "IRI_2025", "SHAPE@"]
+                  "friction_date", "SHAPE@"] + seg_hist
     features = []
-    # per-SecID aggregation for section-level merge
     agg = defaultdict(lambda: {"fa_sum": 0.0, "a_fric": 0.0, "a_all": 0.0,
-                               "collected": False, "n": 0, "n_fric": 0})
-    # per-NETWORKID stats
+                               "n": 0, "n_fric": 0})
     road = defaultdict(lambda: {"n_segments": 0, "n_friction": 0,
-                                "n_collected": 0, "sectioned_mi": 0.0,
-                                "collected_seg_mi": 0.0})
+                                "sectioned_mi": 0.0})
     with arcpy.da.SearchCursor(seg_fc, seg_fields) as cur:
-        for (secid, pid, segid, nid, sectionid, pav, length_ft, area_ft,
-             shp_area, pt_count, status, fric, fdate, skid25, iri25,
-             shp) in cur:
-            seg_len_ft = None
+        for row in cur:
+            (secid, pid, segid, nid, sectionid, pav, length_ft, area_ft,
+             shp_area, pt_count, status, fric, fdate, shp) = row[:14]
+            hist = dict(zip(seg_hist, row[14:]))
+            seg_len_mi = 0.0
             if area_ft and length_ft and shp_area:
-                seg_len_ft = shp_area / (area_ft * SQFT_TO_SQM) * length_ft
-            seg_len_mi = (seg_len_ft or 0) / FT_PER_MILE
+                seg_len_mi = (shp_area / (area_ft * SQFT_TO_SQM) * length_ft
+                              / FT_PER_MILE)
 
-            collected = bool(pt_count) or bool(status and status != "no_points")
             a = agg[secid]
             a["n"] += 1
             a["a_all"] += shp_area or 0
-            a["collected"] = a["collected"] or collected
             if fric is not None:
                 a["n_fric"] += 1
                 a["a_fric"] += shp_area or 0
@@ -128,70 +125,66 @@ def export_network(group):
             if fric is not None:
                 r["n_friction"] += 1
                 r["sectioned_mi"] += seg_len_mi
-            if collected:
-                r["n_collected"] += 1
-                r["collected_seg_mi"] += seg_len_mi
 
+            skid25 = hist.get("Skid_2025")
             d_skid = (fric - skid25) if (fric is not None and skid25 is not None) else None
-            features.append({
-                "type": "Feature",
-                "geometry": geom_to_geojson(shp),
-                "properties": {
-                    "SecID": secid, "PID": pid, "segment_id": segid,
-                    "NETWORKID": nid, "SECTIONID": sectionid,
-                    "PavementTy": pav,
-                    "seg_len_mi": round(seg_len_mi, 4),
-                    "pt_count": pt_count, "section_status": status,
-                    "friction": fric,
-                    "friction_date": str(fdate)[:10] if fdate else None,
-                    "Skid_2025": skid25, "IRI_2025": iri25,
-                    "d_skid": round(d_skid, 1) if d_skid is not None else None,
-                    "collected": 1 if collected else 0,
-                },
-            })
+            props = {
+                "SecID": secid, "PID": pid, "segment_id": segid,
+                "NETWORKID": nid, "SECTIONID": sectionid,
+                "PavementTy": pav,
+                "seg_len_mi": round(seg_len_mi, 4),
+                "pt_count": pt_count, "section_status": status,
+                "friction": fric,
+                "friction_date": str(fdate)[:10] if fdate else None,
+                "d_skid": round(d_skid, 1) if d_skid is not None else None,
+            }
+            props.update(hist)
+            features.append({"type": "Feature",
+                             "geometry": geom_to_geojson(shp),
+                             "properties": props})
     write_geojson(os.path.join(DATA_DIR, "segments_{}.geojson".format(group)),
                   features)
 
     # ---- sections (original, pre-explode) ----
     sec_names = {f.name for f in arcpy.ListFields(sec_fc)}
     sectionid_sf = "SECTIONID" if "SECTIONID" in sec_names else "SecCode"
+    sec_hist = [f for f in HISTORY_FIELDS if f in sec_names]
     sec_fields = ["SecID", "PID", "NETWORKID", sectionid_sf, "SecCode",
                   "PavementTy", "length", "From__km_", "To__km_",
-                  "Skid_2025", "IRI_2025", "SHAPE@"]
+                  "SHAPE@"] + sec_hist
     features = []
     total_by_road = defaultdict(float)
     with arcpy.da.SearchCursor(sec_fc, sec_fields) as cur:
-        for (secid, pid, nid, sectionid, seccode, pav, length_ft,
-             fkm, tkm, skid25, iri25, shp) in cur:
+        for row in cur:
+            (secid, pid, nid, sectionid, seccode, pav, length_ft,
+             fkm, tkm, shp) = row[:10]
+            hist = dict(zip(sec_hist, row[10:]))
             total_by_road[nid] += (length_ft or 0) / FT_PER_MILE
             a = agg.get(secid)
             fric_aw = None
             pct_sect = 0.0
-            collected = False
             if a:
-                collected = a["collected"]
                 if a["a_fric"] > 0:
                     fric_aw = round(a["fa_sum"] / a["a_fric"], 1)
                 if a["a_all"] > 0:
                     pct_sect = round(100.0 * a["a_fric"] / a["a_all"], 1)
+            skid25 = hist.get("Skid_2025")
             d_skid = (fric_aw - skid25) if (fric_aw is not None and skid25 is not None) else None
-            features.append({
-                "type": "Feature",
-                "geometry": geom_to_geojson(shp),
-                "properties": {
-                    "SecID": secid, "PID": pid, "NETWORKID": nid,
-                    "SECTIONID": sectionid, "SecCode": seccode,
-                    "PavementTy": pav,
-                    "length_mi": round((length_ft or 0) / FT_PER_MILE, 3),
-                    "From_km": fkm, "To_km": tkm,
-                    "Skid_2025": skid25, "IRI_2025": iri25,
-                    "friction_aw": fric_aw, "pct_sectioned": pct_sect,
-                    "d_skid": round(d_skid, 1) if d_skid is not None else None,
-                    "collected": 1 if collected else 0,
-                    "n_segments": a["n"] if a else 0,
-                    "n_friction": a["n_fric"] if a else 0,
-                },
-            })
+            props = {
+                "SecID": secid, "PID": pid, "NETWORKID": nid,
+                "SECTIONID": sectionid, "SecCode": seccode,
+                "PavementTy": pav,
+                "length_mi": round((length_ft or 0) / FT_PER_MILE, 3),
+                "From_km": fkm, "To_km": tkm,
+                "friction_aw": fric_aw, "pct_sectioned": pct_sect,
+                "d_skid": round(d_skid, 1) if d_skid is not None else None,
+                "n_segments": a["n"] if a else 0,
+                "n_friction": a["n_fric"] if a else 0,
+            }
+            props.update(hist)
+            features.append({"type": "Feature",
+                             "geometry": geom_to_geojson(shp),
+                             "properties": props})
     write_geojson(os.path.join(DATA_DIR, "sections_{}.geojson".format(group)),
                   features)
 
@@ -199,21 +192,40 @@ def export_network(group):
     for nid in sorted(set(list(road) + list(total_by_road))):
         r = road[nid]
         by_road[nid] = {
+            "group": group,
             "total_mi": round(total_by_road.get(nid, 0), 2),
             "sectioned_mi": round(r["sectioned_mi"], 2),
-            "collected_seg_mi": round(r["collected_seg_mi"], 2),
             "n_segments": r["n_segments"],
             "n_friction": r["n_friction"],
-            "n_collected": r["n_collected"],
         }
     return by_road
 
 
-def export_testlines():
-    """Merge all TEST_*_Line FCs; return per-day stats."""
+def build_footprints():
+    """NETWORKID -> buffered dissolved inventory polygon (native UTM SR)."""
+    foot = {}
+    sr = None
+    for group in GROUPS:
+        fc = os.path.join(INV_GDB, "{}_2026_Inventory".format(group))
+        out = r"memory\diss_{}".format(group)
+        arcpy.management.Dissolve(fc, out, "NETWORKID")
+        with arcpy.da.SearchCursor(out, ["NETWORKID", "SHAPE@"]) as cur:
+            for nid, shp in cur:
+                foot[nid] = shp.buffer(FOOTPRINT_BUFFER_M)
+                sr = shp.spatialReference
+        arcpy.management.Delete(out)
+    log("built {} road footprints (buffer {} m)".format(
+        len(foot), FOOTPRINT_BUFFER_M))
+    return foot, sr
+
+
+def export_testlines(footprints, inv_sr, group_of):
+    """Merge all TEST_*_Line FCs; intersect runs with road footprints.
+    Returns (days list, collected_by_road dict)."""
     arcpy.env.workspace = LINES_GDB
     features = []
     days = []
+    collected_by_road = defaultdict(float)
     for fc in sorted(arcpy.ListFeatureClasses() or []):
         m = re.match(r"TEST_(\d{4})(\d{2})(\d{2})_Line", fc)
         if not m:
@@ -225,30 +237,41 @@ def export_testlines():
             for fname, shp in cur:
                 if shp is None:
                     continue
-                utm_shp = shp.projectAs(UTM)
-                length_mi = utm_shp.length / 1609.344
-                group, nid = None, None
-                for tok in re.findall(r"PR[\s_]?(\d+[AB]?)", fname or ""):
-                    if tok in ROUTE_MAP:
-                        group, nid = ROUTE_MAP[tok]
-                        break
+                utm_shp = shp.projectAs(inv_sr)
+                length_mi = utm_shp.length / M_PER_MILE
+
+                # split the run's length across the road footprints it crosses
+                parts = []
+                for nid, foot in footprints.items():
+                    if utm_shp.disjoint(foot):
+                        continue
+                    seg = utm_shp.intersect(foot, 2)  # polyline overlap
+                    mi = seg.length / M_PER_MILE
+                    if mi > 0.005:
+                        parts.append({"route": nid, "network": group_of[nid],
+                                      "mi": round(mi, 2)})
+                        collected_by_road[nid] += mi
+                parts.sort(key=lambda p: -p["mi"])
+                route = parts[0]["route"] if parts else None
+                key = day + "|" + (fname or "")
                 features.append({
                     "type": "Feature",
                     "geometry": geom_to_geojson(utm_shp, generalize_m=2.0),
                     "properties": {
-                        "day": day, "file": fname,
+                        "key": key, "day": day, "file": fname,
                         "length_mi": round(length_mi, 2),
-                        "network": group, "route": nid,
+                        "route": route,
+                        "routes": json.dumps(parts),
                     },
                 })
                 files.append({"file": fname, "length_mi": round(length_mi, 2),
-                              "network": group, "route": nid})
+                              "route": route, "networks": parts})
         files.sort(key=lambda x: x["file"])
         days.append({"day": day,
                      "total_mi": round(sum(f["length_mi"] for f in files), 2),
                      "n_files": len(files), "files": files})
     write_geojson(os.path.join(DATA_DIR, "testlines.geojson"), features)
-    return days
+    return days, collected_by_road
 
 
 def main():
@@ -258,50 +281,45 @@ def main():
     log("ETL start")
 
     networks = {}
-    for group in ("AMPR", "PRTR"):
+    for group in GROUPS:
         log("exporting {} ...".format(group))
         networks[group] = {"by_road": export_network(group)}
 
-    log("exporting test lines ...")
-    days = export_testlines()
+    group_of = {nid: g for g in GROUPS for nid in networks[g]["by_road"]}
 
-    # roll up collected miles per road / group from test lines
-    collected_by_road = defaultdict(float)
-    collected_by_group = defaultdict(float)
-    unattributed_mi = 0.0
-    for d in days:
-        for f in d["files"]:
-            if f["route"]:
-                collected_by_road[f["route"]] += f["length_mi"]
-                collected_by_group[f["network"]] += f["length_mi"]
-            else:
-                unattributed_mi += f["length_mi"]
+    log("building road footprints + intersecting test lines ...")
+    footprints, inv_sr = build_footprints()
+    days, collected_by_road = export_testlines(footprints, inv_sr, group_of)
+
+    line_total = round(sum(d["total_mi"] for d in days), 2)
+    on_network = round(sum(collected_by_road.values()), 2)
 
     for group, g in networks.items():
-        tot = sect = coll_seg = 0.0
+        tot = sect = coll = 0.0
         for nid, r in g["by_road"].items():
-            r["collected_line_mi"] = round(collected_by_road.get(nid, 0), 2)
+            r["collected_mi"] = round(collected_by_road.get(nid, 0), 2)
             tot += r["total_mi"]
             sect += r["sectioned_mi"]
-            coll_seg += r["collected_seg_mi"]
+            coll += r["collected_mi"]
         g["total_mi"] = round(tot, 2)
         g["sectioned_mi"] = round(sect, 2)
-        g["collected_seg_mi"] = round(coll_seg, 2)
-        g["collected_line_mi"] = round(collected_by_group.get(group, 0), 2)
+        g["collected_mi"] = round(coll, 2)
         g["pct_sectioned"] = round(100 * sect / tot, 1) if tot else 0
-        g["pct_collected"] = round(100 * min(coll_seg, tot) / tot, 1) if tot else 0
+        g["pct_collected"] = round(100 * min(coll, tot) / tot, 1) if tot else 0
 
     stats = {
         "generated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "networks": networks,
         "days": days,
-        "collected_line_total_mi": round(
-            sum(d["total_mi"] for d in days), 2),
-        "unattributed_line_mi": round(unattributed_mi, 2),
+        "line_total_mi": line_total,
+        "line_on_network_mi": on_network,
+        "line_off_network_mi": round(line_total - on_network, 2),
         "notes": {
-            "collected_seg_mi": "miles of 0.05-mi segments touched by sectioning (pt_count/status)",
-            "collected_line_mi": "test-line miles attributed to this road by FILE_NAME",
-            "sectioned_mi": "miles of segments with a 2026 friction value",
+            "collected_mi": "test-line miles intersecting the road's buffered "
+                            "inventory footprint ({} m); one run can feed "
+                            "several roads".format(FOOTPRINT_BUFFER_M),
+            "sectioned_mi": "miles of 0.05-mi segments with a 2026 friction "
+                            "value (area-fraction x parent length)",
         },
     }
     with open(os.path.join(DATA_DIR, "stats.json"), "w") as f:
