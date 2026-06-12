@@ -1,5 +1,20 @@
 # Progress Log
 
+## 2026-06-12 — UI revision (user feedback round 1)
+
+- **RFT / MFV mode toggle** + single-select layer dropdown moved into a floating
+  "Map layer" box on the right side of the map. MFV layers (IRI 2026, collected, Δ IRI)
+  are listed but render as placeholders until MFE sectioning produces 2026 IRI values.
+- **Removed "All roads" header dropdown** — the By-road panel is now the road selector:
+  hover highlight, 🔍 icon, hint text; click zooms to the road, click again clears
+  (flies back to overview).
+- **Road bars fixed**: collected (orange) and sectioned (green) now drawn on separate
+  tracks with % labels instead of overlapping fills (the overlap made orange look wrong).
+- **Test lines** switched from a long checkbox list to multi-select dropdowns:
+  a Days dropdown (with "All days"), then one Runs dropdown per selected day
+  (with "All runs" + individual .slf runs). Scales to ~30 runs/day.
+
+
 ## 2026-06-12 — initial build
 
 **Explored & documented** (see DATA_STRUCTURE.md)

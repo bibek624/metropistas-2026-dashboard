@@ -5,13 +5,29 @@ const GROUPS = ["AMPR", "PRTR"];
 const DAY_COLORS = ["#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4",
   "#46f0f0", "#f032e6", "#bcf60c", "#008080", "#9a6324", "#800000", "#000075"];
 
+/* layers offered per mode; MFV activates once 2026 IRI data exists in the export */
+const MODE_LAYERS = {
+  RFT: [
+    { id: "friction", label: "Friction 2026" },
+    { id: "collected", label: "Collected vs not" },
+    { id: "sectioned", label: "Sectioned vs not" },
+    { id: "d_skid", label: "Δ Friction 2026 − Skid 2025" },
+  ],
+  MFV: [
+    { id: "iri26", label: "IRI 2026 (pending)" },
+    { id: "m_collected", label: "Collected vs not (pending)" },
+    { id: "d_iri", label: "Δ IRI 2026 − 2025 (pending)" },
+  ],
+};
+
 const state = {
   net: "ALL",            // ALL | AMPR | PRTR
-  road: "",              // "" = all roads
+  road: "",              // "" = all roads (click a road bar to focus)
   level: "segments",     // segments | sections
-  view: "friction",
-  selectedRuns: new Set(), // "day|file" keys; empty per day-checkbox handled below
-  dayOn: new Set(),
+  mode: "RFT",           // RFT | MFV
+  layer: "friction",
+  dayOn: new Set(),      // selected days
+  fileSel: {},           // day -> Set(files) (subset shown for that day)
 };
 
 let stats = null;
@@ -102,7 +118,7 @@ async function init() {
   });
   map.on("click", "testlines-line", onLineClick);
 
-  buildRoadSelect();
+  buildLayerSelect();
   buildTestlinePanel();
   applyAll();
   $("#loading").style.display = "none";
@@ -112,7 +128,7 @@ function mergeFC(a, b) {
   return { type: "FeatureCollection", features: a.features.concat(b.features) };
 }
 
-/* ---------- paint expressions per view ---------- */
+/* ---------- paint expressions per mode/layer ---------- */
 const FRICTION_RAMP = [
   0, "#d73027", 30, "#fc8d59", 40, "#fee08b", 50, "#d9ef8b", 60, "#91cf60", 75, "#1a9850",
 ];
@@ -130,9 +146,10 @@ function diffColor(field) {
       3, "#d1e5f0", 10, "#67a9cf", 25, "#2166ac"]];
 }
 
-function paintFor(view, level) {
+function paintFor(mode, layer, level) {
+  if (mode === "MFV") return "#c8cdd3"; // placeholder until MFV/IRI 2026 exists
   const fricField = level === "segments" ? "friction" : "friction_aw";
-  switch (view) {
+  switch (layer) {
     case "friction":
       return frictionColor(fricField);
     case "collected":
@@ -145,8 +162,6 @@ function paintFor(view, level) {
       return ["case", ["!=", ["get", "friction"], null], "#27ae60", "#d64541"];
     case "d_skid":
       return diffColor("d_skid");
-    case "d_iri":
-      return "#c8cdd3"; // placeholder until MFV/IRI 2026 exists
     default:
       return "#888";
   }
@@ -160,25 +175,26 @@ function dayColorExpr() {
 }
 
 /* ---------- legends ---------- */
-function legendFor(view) {
+function legendFor(mode, layer) {
   const rows = [];
   const add = (c, t) => rows.push(`<div class="legend-row"><span class="legend-swatch" style="background:${c}"></span>${t}</div>`);
-  if (view === "friction") {
+  if (mode === "MFV") {
+    add("#c8cdd3", "No MFV/IRI 2026 data yet");
+    rows.push(`<div class="legend-note">MFE/IRI sectioning has not been run. This layer activates automatically once 2026 IRI values are written to the inventory and exported.</div>`);
+  } else if (layer === "friction") {
     add("#d73027", "≤ 30"); add("#fc8d59", "30–40"); add("#fee08b", "40–50");
     add("#d9ef8b", "50–60"); add("#91cf60", "60–75"); add("#1a9850", "≥ 75");
     add("#c8cdd3", "No value yet");
     rows.push(`<div class="legend-note">Friction number = floor(mean μ × 100), 2026 RFT</div>`);
-  } else if (view === "collected") {
+  } else if (layer === "collected") {
     add("#27ae60", "Collected (has RFT points)"); add("#d64541", "Not collected");
-  } else if (view === "sectioned") {
+  } else if (layer === "sectioned") {
     add("#27ae60", "Sectioned (friction calculated)"); add("#d64541", "Not sectioned");
     if (state.level === "sections") rows.push(`<div class="legend-note">Sections shaded by % of segment area sectioned</div>`);
-  } else if (view === "d_skid") {
+  } else if (layer === "d_skid") {
     add("#b2182b", "≤ −25 (worse)"); add("#ef8a62", "−10"); add("#f7f7f7", "0");
     add("#67a9cf", "+10"); add("#2166ac", "≥ +25 (better)"); add("#c8cdd3", "No 2026 value");
     rows.push(`<div class="legend-note">Friction 2026 − Skid 2025</div>`);
-  } else if (view === "d_iri") {
-    rows.push(`<div class="legend-note">MFV/IRI 2026 sectioning not done yet — layer will activate once IRI values exist.</div>`);
   }
   $("#legend").innerHTML = rows.join("");
 }
@@ -194,6 +210,16 @@ function featureFilter() {
   return f;
 }
 
+function selectedRunKeys() {
+  const keys = [];
+  for (const day of state.dayOn) {
+    const sel = state.fileSel[day];
+    if (!sel) continue;
+    for (const f of sel) keys.push(day + "|" + f);
+  }
+  return keys;
+}
+
 function applyAll() {
   for (const lvl of ["segments", "sections"]) {
     const vis = lvl === state.level ? "visible" : "none";
@@ -202,18 +228,41 @@ function applyAll() {
     map.setFilter(lvl + "-fill", featureFilter());
     map.setFilter(lvl + "-line", featureFilter());
   }
-  map.setPaintProperty(state.level + "-fill", "fill-color", paintFor(state.view, state.level));
-  const runKeys = [...state.selectedRuns];
-  const runFilter = ["in", ["concat", ["get", "day"], "|", ["get", "file"]], ["literal", runKeys]];
+  map.setPaintProperty(state.level + "-fill", "fill-color",
+    paintFor(state.mode, state.layer, state.level));
+  const runFilter = ["in", ["concat", ["get", "day"], "|", ["get", "file"]],
+    ["literal", selectedRunKeys()]];
   map.setFilter("testlines-line", runFilter);
   map.setFilter("testlines-label", runFilter);
-  legendFor(state.view);
+  legendFor(state.mode, state.layer);
   renderStats();
 }
 
+/* ---------- layer box (right side of map) ---------- */
+function buildLayerSelect() {
+  const sel = $("#layer-select");
+  sel.innerHTML = MODE_LAYERS[state.mode]
+    .map((l) => `<option value="${l.id}">${l.label}</option>`).join("");
+  state.layer = MODE_LAYERS[state.mode][0].id;
+  sel.value = state.layer;
+}
+
+$("#mode-toggle").addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") return;
+  $("#mode-toggle .active").classList.remove("active");
+  e.target.classList.add("active");
+  state.mode = e.target.dataset.mode;
+  buildLayerSelect();
+  applyAll();
+});
+
+$("#layer-select").addEventListener("change", (e) => {
+  state.layer = e.target.value;
+  applyAll();
+});
+
 /* ---------- sidebar: gauges + tables ---------- */
 function netTotals() {
-  // returns {total, collected_line, collected_seg, sectioned} for current net selection (or road)
   let roads;
   if (state.road) {
     for (const g of GROUPS) {
@@ -271,22 +320,28 @@ function renderRoadBars() {
       const pc = v.total_mi ? Math.min(100, (100 * v.collected_seg_mi) / v.total_mi) : 0;
       const ps = v.total_mi ? Math.min(100, (100 * v.sectioned_mi) / v.total_mi) : 0;
       html += `
-      <div class="road-bar ${state.road === r ? "selected" : ""}" data-road="${r}">
-        <div class="rb-head"><span class="rb-name">${r} <small>(${g})</small></span>
-          <span>${v.sectioned_mi.toFixed(0)} / ${v.total_mi.toFixed(0)} mi</span></div>
-        <div class="rb-track"><div class="rb-coll" style="width:${pc}%"></div>
-          <div class="rb-sect" style="width:${ps}%"></div></div>
+      <div class="road-bar ${state.road === r ? "selected" : ""}" data-road="${r}" title="Click to zoom to ${r}">
+        <div class="rb-head">
+          <span class="rb-name">${r} <small>(${g})</small><span class="zoom-ico">🔍</span></span>
+          <span>${v.total_mi.toFixed(0)} mi</span>
+        </div>
+        <div class="rb-row"><span class="rb-tag">C</span>
+          <div class="rb-track"><div class="rb-fill coll" style="width:${pc}%"></div></div>
+          <span class="rb-pct">${pc.toFixed(0)}%</span></div>
+        <div class="rb-row"><span class="rb-tag">S</span>
+          <div class="rb-track"><div class="rb-fill sect" style="width:${ps}%"></div></div>
+          <span class="rb-pct">${ps.toFixed(0)}%</span></div>
       </div>`;
     }
   }
-  html += `<div class="legend-note">▮ green = sectioned, ▮ orange = collected. Click a bar to focus that road.</div>`;
+  html += `<div class="legend-note">C = collected (orange), S = sectioned (green). Click a road to zoom; click again to clear.</div>`;
   box.innerHTML = html;
   box.querySelectorAll(".road-bar").forEach((el) =>
     el.addEventListener("click", () => {
       state.road = state.road === el.dataset.road ? "" : el.dataset.road;
-      $("#road-select").value = state.road;
       applyAll();
       if (state.road) zoomToRoad(state.road);
+      else map.flyTo({ center: [-66.3, 18.35], zoom: 9 });
     }));
 }
 
@@ -308,49 +363,106 @@ function walkCoords(c, cb) {
   else c.forEach((cc) => walkCoords(cc, cb));
 }
 
-/* ---------- test line panel ---------- */
+/* ---------- test lines: multi-select dropdowns ---------- */
+function msddSummary(selected, total, noun) {
+  if (!selected) return "None";
+  if (selected === total) return `All ${noun} (${total})`;
+  if (selected === 1) return `1 ${noun.replace(/s$/, "")}`;
+  return `${selected} ${noun}`;
+}
+
 function buildTestlinePanel() {
-  const box = $("#testline-days");
-  let html = "";
-  stats.days.forEach((d, i) => {
-    const color = DAY_COLORS[i % DAY_COLORS.length];
-    html += `
-    <div class="day-row" data-day="${d.day}">
-      <label>
-        <input type="checkbox" class="day-check" value="${d.day}">
-        <span class="day-swatch" style="background:${color}"></span>
-        <strong>${d.day}</strong>
-        <span class="day-meta">${d.total_mi.toFixed(1)} mi · ${d.n_files} runs</span>
-        <button class="day-expand" title="show runs">▾</button>
-      </label>
-      <div class="file-list">` +
-      d.files.map((f) => `
-        <label><input type="checkbox" class="file-check" data-day="${d.day}" value="${f.file}" checked>
-          <span>${f.file}</span><span class="fl-mi">${f.length_mi} mi</span></label>`).join("") +
-      `</div>
-    </div>`;
-  });
-  box.innerHTML = html;
+  const box = $("#testline-panel");
+  box.innerHTML = `
+    <div class="msdd" id="dd-days">
+      <button type="button" class="msdd-btn"><span class="msdd-text">None</span></button>
+      <div class="msdd-panel"></div>
+    </div>
+    <div id="file-dds"></div>`;
 
-  box.querySelectorAll(".day-expand").forEach((btn) =>
-    btn.addEventListener("click", (e) => {
-      e.preventDefault(); e.stopPropagation();
-      btn.closest(".day-row").querySelector(".file-list").classList.toggle("open");
-    }));
+  const panel = box.querySelector("#dd-days .msdd-panel");
+  panel.innerHTML =
+    `<label class="all-opt"><input type="checkbox" data-all="1"> All days</label>` +
+    stats.days.map((d, i) => `
+      <label><input type="checkbox" value="${d.day}">
+        <span class="day-swatch" style="background:${DAY_COLORS[i % DAY_COLORS.length]}"></span>
+        ${d.day}<span class="opt-meta">${d.total_mi.toFixed(1)} mi · ${d.n_files} runs</span></label>`).join("");
 
-  const sync = () => {
-    state.selectedRuns.clear();
-    box.querySelectorAll(".day-row").forEach((row) => {
-      const day = row.dataset.day;
-      if (!row.querySelector(".day-check").checked) return;
-      row.querySelectorAll(".file-check").forEach((fc) => {
-        if (fc.checked) state.selectedRuns.add(day + "|" + fc.value);
-      });
-    });
+  const btn = box.querySelector("#dd-days .msdd-btn");
+  btn.addEventListener("click", () => box.querySelector("#dd-days").classList.toggle("open"));
+
+  panel.addEventListener("change", (e) => {
+    const boxes = [...panel.querySelectorAll('input[type="checkbox"]:not([data-all])')];
+    if (e.target.dataset.all) boxes.forEach((cb) => (cb.checked = e.target.checked));
+    else panel.querySelector("[data-all]").checked = boxes.every((cb) => cb.checked);
+    state.dayOn = new Set(boxes.filter((cb) => cb.checked).map((cb) => cb.value));
+    // default newly enabled days to all files
+    for (const day of state.dayOn) {
+      if (!state.fileSel[day]) {
+        const d = stats.days.find((x) => x.day === day);
+        state.fileSel[day] = new Set(d.files.map((f) => f.file));
+      }
+    }
+    btn.querySelector(".msdd-text").textContent =
+      msddSummary(state.dayOn.size, stats.days.length, "days");
+    renderFileDropdowns();
     applyAll();
-  };
-  box.querySelectorAll(".day-check, .file-check").forEach((cb) =>
-    cb.addEventListener("change", sync));
+  });
+
+  // close dropdowns when clicking elsewhere
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".msdd"))
+      document.querySelectorAll(".msdd.open").forEach((el) => el.classList.remove("open"));
+  });
+}
+
+function renderFileDropdowns() {
+  const wrap = $("#file-dds");
+  wrap.innerHTML = "";
+  const dayList = stats.days.filter((d) => state.dayOn.has(d.day));
+  for (const d of dayList) {
+    const i = stats.days.indexOf(d);
+    const sel = state.fileSel[d.day];
+    const dd = document.createElement("div");
+    dd.innerHTML = `
+      <div class="msdd-sub-label">
+        <span class="day-swatch" style="background:${DAY_COLORS[i % DAY_COLORS.length]}"></span>
+        Runs on ${d.day}</div>
+      <div class="msdd">
+        <button type="button" class="msdd-btn"><span class="msdd-text"></span></button>
+        <div class="msdd-panel">
+          <label class="all-opt"><input type="checkbox" data-all="1"> All runs</label>` +
+      d.files.map((f) => `
+          <label><input type="checkbox" value="${f.file.replace(/"/g, "&quot;")}">
+            <span>${f.file}</span><span class="opt-meta">${f.length_mi} mi</span></label>`).join("") +
+      `</div></div>`;
+    wrap.appendChild(dd);
+
+    const msdd = dd.querySelector(".msdd");
+    const btn = dd.querySelector(".msdd-btn");
+    const panel = dd.querySelector(".msdd-panel");
+    const boxes = [...panel.querySelectorAll('input[type="checkbox"]:not([data-all])')];
+    const allCb = panel.querySelector("[data-all]");
+
+    const refresh = () => {
+      boxes.forEach((cb) => (cb.checked = sel.has(cb.value)));
+      allCb.checked = sel.size === d.files.length;
+      btn.querySelector(".msdd-text").textContent =
+        msddSummary(sel.size, d.files.length, "runs");
+    };
+    refresh();
+
+    btn.addEventListener("click", () => msdd.classList.toggle("open"));
+    panel.addEventListener("change", (e) => {
+      if (e.target.dataset.all) {
+        sel.clear();
+        if (e.target.checked) d.files.forEach((f) => sel.add(f.file));
+      } else if (e.target.checked) sel.add(e.target.value);
+      else sel.delete(e.target.value);
+      refresh();
+      applyAll();
+    });
+  }
 }
 
 /* ---------- popups ---------- */
@@ -395,28 +507,19 @@ function onLineClick(e) {
       <tr><td>Length</td><td>${p.length_mi} mi</td></tr>
       <tr><td>Route</td><td>${p.route || "connector/ramp"}</td></tr></table>`)
     .addTo(map);
-  e.preventDefault && e.preventDefault();
 }
 
 /* ---------- header controls ---------- */
-function buildRoadSelect() {
-  const sel = $("#road-select");
-  const groups = state.net === "ALL" ? GROUPS : [state.net];
-  const cur = state.road;
-  sel.innerHTML = '<option value="">All roads</option>';
-  for (const g of groups)
-    for (const r of Object.keys(stats.networks[g].by_road))
-      sel.innerHTML += `<option value="${r}">${r} (${g})</option>`;
-  sel.value = cur && [...sel.options].some((o) => o.value === cur) ? cur : "";
-  state.road = sel.value;
-}
-
 $("#network-toggle").addEventListener("click", (e) => {
   if (e.target.tagName !== "BUTTON") return;
   $("#network-toggle .active").classList.remove("active");
   e.target.classList.add("active");
   state.net = e.target.dataset.net;
-  buildRoadSelect();
+  if (state.road) {
+    // drop road focus if it's not in the new network selection
+    const ok = state.net === "ALL" || stats.networks[state.net].by_road[state.road];
+    if (!ok) state.road = "";
+  }
   applyAll();
 });
 
@@ -425,17 +528,6 @@ $("#level-toggle").addEventListener("click", (e) => {
   $("#level-toggle .active").classList.remove("active");
   e.target.classList.add("active");
   state.level = e.target.dataset.level;
-  applyAll();
-});
-
-$("#road-select").addEventListener("change", (e) => {
-  state.road = e.target.value;
-  applyAll();
-  if (state.road) zoomToRoad(state.road);
-});
-
-$("#view-select").addEventListener("change", (e) => {
-  state.view = e.target.value;
   applyAll();
 });
 

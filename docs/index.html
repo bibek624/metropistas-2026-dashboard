@@ -15,20 +15,10 @@
     <button data-net="AMPR">AMPR</button>
     <button data-net="PRTR">PRTR</button>
   </div>
-  <select id="road-select" title="Road (network ID)">
-    <option value="">All roads</option>
-  </select>
   <div class="ctrl-group" id="level-toggle">
     <button data-level="segments" class="active">0.05-mi segments</button>
     <button data-level="sections" title="Original .sec sections">Sections</button>
   </div>
-  <select id="view-select" title="Map view">
-    <option value="friction">Friction 2026 (RFT)</option>
-    <option value="collected">Collected vs not</option>
-    <option value="sectioned">Sectioned vs not</option>
-    <option value="d_skid">Δ Friction 2026 − Skid 2025</option>
-    <option value="d_iri">Δ IRI 2026 − 2025 (MFV)</option>
-  </select>
   <span id="updated"></span>
 </header>
 
@@ -43,19 +33,28 @@
       <table id="miles-table"></table>
     </section>
     <section>
-      <h2>By road</h2>
+      <h2>By road <span class="hint">— click a road to zoom</span></h2>
       <div id="road-bars"></div>
     </section>
     <section>
-      <h2>Test lines <span class="hint">(overlay days, expand for runs)</span></h2>
-      <div id="testline-days"></div>
+      <h2>Test lines</h2>
+      <div id="testline-panel"></div>
     </section>
     <section id="legend-box">
       <h2>Legend</h2>
       <div id="legend"></div>
     </section>
   </aside>
-  <div id="map"></div>
+  <div id="map">
+    <div id="layer-box">
+      <div class="lb-title">Map layer</div>
+      <div class="ctrl-group small" id="mode-toggle">
+        <button data-mode="RFT" class="active">RFT</button>
+        <button data-mode="MFV">MFV</button>
+      </div>
+      <select id="layer-select"></select>
+    </div>
+  </div>
 </div>
 
 <div id="loading">Loading data…</div>
