@@ -17,7 +17,7 @@ const MODE_LAYERS = {
   RFT: [
     { id: "friction", label: "Friction 2026" },
     { id: "sectioned", label: "Sectioned vs not" },
-    { id: "d_skid", label: "Δ Friction 2026 − Skid 2025" },
+    { id: "d_friction", label: "Δ Friction (2026 − 2025)" },
   ],
   MFV: [
     { id: "iri26", label: "IRI 2026", pending: true },
@@ -31,6 +31,7 @@ const state = {
   level: "segments",
   mode: "RFT",
   layer: "friction",
+  basemap: "sat",
   dayOn: new Set(),
   runSel: new Set(),   // keys "day|file"
 };
@@ -58,20 +59,35 @@ async function init() {
       version: 8,
       glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
       sources: {
-        osm: {
+        sat: {
+          type: "raster",
+          tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+          tileSize: 256, maxzoom: 19,
+          attribution: "© Esri, Maxar, Earthstar Geographics",
+        },
+        light: {
           type: "raster",
           tiles: ["https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png"],
-          tileSize: 256,
+          tileSize: 512,
           attribution: "© OpenStreetMap contributors © CARTO",
         },
       },
-      layers: [{ id: "basemap", type: "raster", source: "osm" }],
+      layers: [
+        { id: "basemap-sat", type: "raster", source: "sat",
+          layout: { visibility: "visible" } },
+        { id: "basemap-light", type: "raster", source: "light",
+          layout: { visibility: "none" } },
+      ],
     },
     center: [-66.3, 18.35],
     zoom: 9,
+    fadeDuration: 0,
   });
   map.addControl(new maplibregl.NavigationControl(), "top-right");
   map.addControl(new maplibregl.ScaleControl({ unit: "imperial" }));
+
+  // register before the data fetches so a 'load' fired mid-fetch can't be missed
+  const mapReady = new Promise((res) => map.once("load", res));
 
   const [segA, segP, secA, secP, lines] = await Promise.all([
     loadJSON("data/segments_AMPR.geojson"),
@@ -84,13 +100,14 @@ async function init() {
   DATA.sections = mergeFC(secA, secP);
   DATA.lines = lines;
 
-  await new Promise((res) => (map.loaded() ? res() : map.on("load", res)));
+  await mapReady;
 
   const lineWidth = ["interpolate", ["linear"], ["zoom"],
     7, 2.4, 9.5, 1.9, 11.5, 1.1, 13.5, 0.3];
 
   for (const lvl of ["segments", "sections"]) {
-    map.addSource(lvl, { type: "geojson", data: DATA[lvl], tolerance: 0.6 });
+    // maxzoom: stop re-cutting vector tiles past z14 → much smoother deep zoom
+    map.addSource(lvl, { type: "geojson", data: DATA[lvl], tolerance: 0.6, maxzoom: 14 });
     // color-matched outline keeps roads visible when zoomed out
     map.addLayer({
       id: lvl + "-outline", type: "line", source: lvl,
@@ -100,6 +117,18 @@ async function init() {
     map.addLayer({
       id: lvl + "-fill", type: "fill", source: lvl,
       paint: { "fill-color": C.none, "fill-opacity": 0.9 },
+      layout: { visibility: lvl === state.level ? "visible" : "none" },
+    });
+    // white boundary so individual segments / sections read clearly when zoomed in
+    map.addLayer({
+      id: lvl + "-border", type: "line", source: lvl,
+      paint: {
+        "line-color": "#ffffff",
+        "line-opacity": 0.85,
+        "line-width": lvl === "segments"
+          ? ["interpolate", ["linear"], ["zoom"], 11, 0, 12.5, 0.4, 14, 0.9, 16, 1.7]
+          : ["interpolate", ["linear"], ["zoom"], 10, 0, 12, 0.9, 14, 1.8, 16, 3],
+      },
       layout: { visibility: lvl === state.level ? "visible" : "none" },
     });
     map.on("click", lvl + "-fill", (e) => showFeatureInfo(e.features[0].properties));
@@ -135,7 +164,15 @@ async function init() {
   });
   map.on("mouseenter", "tl-line", () => (map.getCanvas().style.cursor = "pointer"));
 
+  // latest day's runs visible by default so test lines show without digging
+  if (stats.days.length) {
+    const last = stats.days[stats.days.length - 1];
+    state.dayOn.add(last.day);
+    last.files.forEach((f) => state.runSel.add(last.day + "|" + f.file));
+  }
+
   buildLayerList();
+  buildBasemapList();
   buildTestlinePanel();
   applyAll();
   $("#loading").style.display = "none";
@@ -167,7 +204,7 @@ function paintFor(mode, layer, level) {
           0, C.none, 100, C.accent]];
     return ["case", ["!=", ["get", "friction"], null], C.accent, C.none];
   }
-  if (layer === "d_skid") return colorRamp("d_skid", DIFF_STOPS);
+  if (layer === "d_friction") return colorRamp("d_friction", DIFF_STOPS);
   return C.none;
 }
 
@@ -187,10 +224,10 @@ function legendFor(mode, layer) {
     add(C.none, "Not sectioned yet");
     if (state.level === "sections")
       rows.push(`<div class="legend-note">Sections shade toward blue as more of their area is sectioned.</div>`);
-  } else if (layer === "d_skid") {
+  } else if (layer === "d_friction") {
     DIFF_STOPS.forEach(([v, c]) => add(c, v > 0 ? `+${v}` : String(v)));
     add(C.none, "No 2026 value");
-    rows.push(`<div class="legend-note">Friction 2026 − Skid 2025. Purple = improved, orange = dropped.</div>`);
+    rows.push(`<div class="legend-note">Friction 2026 − Friction 2025. Purple = improved, orange = dropped.</div>`);
   }
   $("#legend").innerHTML = rows.join("");
 }
@@ -217,7 +254,7 @@ function applyAll() {
   const color = paintFor(state.mode, state.layer, state.level);
   for (const lvl of ["segments", "sections"]) {
     const vis = lvl === state.level ? "visible" : "none";
-    for (const suffix of ["-fill", "-outline"]) {
+    for (const suffix of ["-fill", "-outline", "-border"]) {
       map.setLayoutProperty(lvl + suffix, "visibility", vis);
       map.setFilter(lvl + suffix, featureFilter());
     }
@@ -229,6 +266,9 @@ function applyAll() {
     type: "FeatureCollection",
     features: DATA.lines.features.filter((f) => state.runSel.has(f.properties.key)),
   });
+  // keep test lines above every polygon layer, whatever else changed
+  for (const id of ["tl-casing", "tl-line", "tl-label"])
+    if (map.getLayer(id)) map.moveLayer(id);
 
   legendFor(state.mode, state.layer);
   renderStats();
@@ -249,6 +289,24 @@ function buildLayerList() {
       r.closest("label").classList.add("checked");
       state.layer = r.value;
       applyAll();
+    }));
+}
+
+function buildBasemapList() {
+  const box = $("#basemap-list");
+  const opts = [{ id: "sat", label: "Satellite" }, { id: "light", label: "Streets (light)" }];
+  box.innerHTML = opts.map((o) => `
+    <label class="${state.basemap === o.id ? "checked" : ""}">
+      <input type="radio" name="basemap" value="${o.id}" ${state.basemap === o.id ? "checked" : ""}>
+      ${o.label}
+    </label>`).join("");
+  box.querySelectorAll("input").forEach((r) =>
+    r.addEventListener("change", () => {
+      state.basemap = r.value;
+      box.querySelectorAll("label").forEach((l) => l.classList.remove("checked"));
+      r.closest("label").classList.add("checked");
+      map.setLayoutProperty("basemap-sat", "visibility", state.basemap === "sat" ? "visible" : "none");
+      map.setLayoutProperty("basemap-light", "visibility", state.basemap === "light" ? "visible" : "none");
     }));
 }
 
@@ -387,7 +445,7 @@ function buildTestlinePanel() {
   dPanel.innerHTML =
     `<label class="all-opt"><input type="checkbox" data-all="1"> All days</label>` +
     stats.days.map((d, i) => `
-      <label><input type="checkbox" value="${d.day}">
+      <label><input type="checkbox" value="${d.day}" ${state.dayOn.has(d.day) ? "checked" : ""}>
         <span class="day-swatch" style="background:${DAY_COLORS[i % DAY_COLORS.length]}"></span>
         ${d.day}<span class="opt-meta">${d.total_mi.toFixed(1)} mi · ${d.n_files} runs</span></label>`).join("");
 
@@ -408,15 +466,15 @@ function buildTestlinePanel() {
         d.files.forEach((f) => state.runSel.delete(d.day + "|" + f.file));
     }
     state.dayOn = newOn;
-    updateDaysButton();
-    renderRunsDropdown();
-    applyAll();
+    // the map update must run even if a UI render above ever throws
+    try { updateDaysButton(); renderRunsDropdown(); } finally { applyAll(); }
   });
 
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".msdd"))
       document.querySelectorAll(".msdd.open").forEach((el) => el.classList.remove("open"));
   });
+  updateDaysButton();
   renderRunsDropdown();
 }
 
@@ -516,13 +574,22 @@ function showFeatureInfo(p) {
   const fric = isSeg ? p.friction : p.friction_aw;
   const chips = [];
   const chip = (k, v) => { if (v !== null && v !== undefined && v !== "") chips.push(`<span class="chip">${k} <b>${v}</b></span>`); };
+  chip("SecID", p.SecID);
   chip("Pavement", p.PavementTy);
   chip("Length", isSeg ? (p.seg_len_mi != null ? p.seg_len_mi.toFixed(3) + " mi" : null) : p.length_mi + " mi");
   if (isSeg) chip("Status", p.section_status || "not sectioned");
   else chip("Sectioned", p.pct_sectioned + "% · " + p.n_friction + "/" + p.n_segments + " segments");
+  chip("Friction 2025", p.Skid_2025);
   chip("Friction 2026", fric ?? "—");
-  if (isSeg && p.friction_date) chip("Friction date", p.friction_date);
-  chip("Δ vs Skid 2025", p.d_skid);
+  chip("Δ Friction (26−25)", p.d_friction);
+
+  // metadata — label over value, flowing into compact columns
+  const meta = [];
+  const m = (k, v) => { if (v) meta.push(`<div class="m-item"><div class="m-k">${k}</div><div class="m-v">${v}</div></div>`); };
+  m("Test file", p.test_file);
+  m("Test date", p.test_date);
+  m("Friction calculation date", p.friction_date);
+  m("Section date", p.section_date);
 
   const charts = [
     { title: "IRI (m/km)", entries: [
@@ -530,20 +597,21 @@ function showFeatureInfo(p) {
       { label: "2024", value: p.IRI_2024 ?? null },
       { label: "2025", value: p.IRI_2025 ?? null },
       { label: "2026", value: null }], accent: false },
-    { title: "Skid / Friction", entries: [
+    { title: "Friction", entries: [
       { label: "2021", value: p.Skid_2021 ?? null },
       { label: "2024", value: p.Skid_2024 ?? null },
       { label: "2025", value: p.Skid_2025 ?? null },
       { label: "2026", value: fric ?? null }], accent: true },
-    { title: "Rutting", entries: [
-      { label: "2021", value: p.Rut_2021 ?? null },
-      { label: "2024", value: p.Rut_2024 ?? null },
-      { label: "2025", value: p.Rut_2025 ?? null }], accent: false },
+    { title: "PCI", entries: [
+      { label: "2021", value: p.PCI_2021 ?? null },
+      { label: "2024", value: p.PCI_2024 ?? null },
+      { label: "2025", value: p.PCI_2025 ?? null }], accent: false },
   ];
   showPanel(`
     <div class="ip-title">${p.NETWORKID} · ${p.SECTIONID || p.SecCode || p.SecID}${isSeg ? " · segment " + p.segment_id : ""}</div>
     <div class="ip-sub">${p.PID || ""}</div>
     <div class="ip-chips">${chips.join("")}</div>
+    ${meta.length ? `<div class="ip-meta">${meta.join("")}</div>` : ""}
     <div class="ip-charts">${charts.map((c) =>
       `<div class="chart-box"><div class="ch-title">${c.title}</div>${barChart(c.entries, c.accent)}</div>`).join("")}
     </div>`);

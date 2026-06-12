@@ -1,5 +1,26 @@
 # Progress Log
 
+## 2026-06-12 — polish round 3 (user feedback)
+
+- **Satellite basemap** (Esri World Imagery) is now the default background; a Basemap
+  radio (Satellite / Streets light) sits at the bottom of the map layer box.
+- **Naming fixed**: Δ layer is "Δ Friction (2026 − 2025)" — the 2025 friction value is the
+  Skid_2025 column, labelled Friction everywhere; exported prop renamed d_skid → d_friction.
+- **Info panel** moved to the bottom-RIGHT of the map, width = max-content (no full-width
+  white space). Added: SecID chip, Friction 2025 chip, Δ Friction chip, and a compact
+  2-column metadata grid (Test file, Test date, Friction calculation date, Section date —
+  test file/date from pt_filename/pt_testlayer, newly exported by the ETL).
+  Rutting chart replaced with **PCI** (2021/2024/2025); Skid chart retitled Friction.
+- **Test-line visibility / initial-render fixes**: map 'load' promise registered before the
+  data fetches (race could stall init), day-change handler runs applyAll() in a finally,
+  tl-* layers are moveLayer()'d to the top on every applyAll, and the latest day's runs are
+  preselected on load so lines are visible immediately.
+- **Segment borders**: white zoom-interpolated boundary lines per level (segments thin,
+  sections thicker) so 0.05-mi segments read individually and the two levels look distinct.
+- **Smoother zoom**: geojson sources maxzoom 14 (no tile re-cutting past z14), CARTO @2x
+  tiles declared at correct 512 tileSize, fadeDuration 0.
+- **Header**: RFT/MFV toggle enlarged + outlined at far left, header gap 22px.
+
 ## 2026-06-12 — redesign (user feedback round 2)
 
 **Collected logic corrected** — collected is a network-level metric, not a per-segment one.

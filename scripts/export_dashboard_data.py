@@ -42,9 +42,10 @@ WGS84 = arcpy.SpatialReference(4326)
 GROUPS = ("AMPR", "PRTR")
 
 # year-history columns to carry into the web data when present
+# (Skid_2025 is the "Friction 2025" value — the dashboard labels it Friction)
 HISTORY_FIELDS = ["IRI_2021", "IRI_2024", "IRI_2025",
                   "Skid_2021", "Skid_2024", "Skid_2025",
-                  "Rut_2021", "Rut_2024", "Rut_2025"]
+                  "PCI_2021", "PCI_2024", "PCI_2025"]
 
 _log_lines = []
 
@@ -96,7 +97,8 @@ def export_network(group):
     seg_fields = ["SecID", "PID", "segment_id", "NETWORKID", sectionid_f,
                   "PavementTy", "length", "area", "Shape_Area",
                   "pt_count", "section_status", "friction_section",
-                  "friction_date", "SHAPE@"] + seg_hist
+                  "friction_date", "pt_filename", "pt_testlayer",
+                  "section_date", "SHAPE@"] + seg_hist
     features = []
     agg = defaultdict(lambda: {"fa_sum": 0.0, "a_fric": 0.0, "a_all": 0.0,
                                "n": 0, "n_fric": 0})
@@ -105,8 +107,9 @@ def export_network(group):
     with arcpy.da.SearchCursor(seg_fc, seg_fields) as cur:
         for row in cur:
             (secid, pid, segid, nid, sectionid, pav, length_ft, area_ft,
-             shp_area, pt_count, status, fric, fdate, shp) = row[:14]
-            hist = dict(zip(seg_hist, row[14:]))
+             shp_area, pt_count, status, fric, fdate, ptfile, ptlayer,
+             sdate, shp) = row[:17]
+            hist = dict(zip(seg_hist, row[17:]))
             seg_len_mi = 0.0
             if area_ft and length_ft and shp_area:
                 seg_len_mi = (shp_area / (area_ft * SQFT_TO_SQM) * length_ft
@@ -126,8 +129,13 @@ def export_network(group):
                 r["n_friction"] += 1
                 r["sectioned_mi"] += seg_len_mi
 
-            skid25 = hist.get("Skid_2025")
-            d_skid = (fric - skid25) if (fric is not None and skid25 is not None) else None
+            # friction 2025 lives in the Skid_2025 column; Δ = 2026 − 2025
+            fric25 = hist.get("Skid_2025")
+            d_fric = (fric - fric25) if (fric is not None and fric25 is not None) else None
+            tdate = None
+            m = re.search(r"TEST_(\d{4})(\d{2})(\d{2})", ptlayer or "")
+            if m:
+                tdate = "-".join(m.groups())
             props = {
                 "SecID": secid, "PID": pid, "segment_id": segid,
                 "NETWORKID": nid, "SECTIONID": sectionid,
@@ -136,7 +144,10 @@ def export_network(group):
                 "pt_count": pt_count, "section_status": status,
                 "friction": fric,
                 "friction_date": str(fdate)[:10] if fdate else None,
-                "d_skid": round(d_skid, 1) if d_skid is not None else None,
+                "test_file": ptfile,
+                "test_date": tdate,
+                "section_date": str(sdate)[:10] if sdate else None,
+                "d_friction": round(d_fric, 1) if d_fric is not None else None,
             }
             props.update(hist)
             features.append({"type": "Feature",
@@ -168,8 +179,8 @@ def export_network(group):
                     fric_aw = round(a["fa_sum"] / a["a_fric"], 1)
                 if a["a_all"] > 0:
                     pct_sect = round(100.0 * a["a_fric"] / a["a_all"], 1)
-            skid25 = hist.get("Skid_2025")
-            d_skid = (fric_aw - skid25) if (fric_aw is not None and skid25 is not None) else None
+            fric25 = hist.get("Skid_2025")
+            d_fric = (fric_aw - fric25) if (fric_aw is not None and fric25 is not None) else None
             props = {
                 "SecID": secid, "PID": pid, "NETWORKID": nid,
                 "SECTIONID": sectionid, "SecCode": seccode,
@@ -177,7 +188,7 @@ def export_network(group):
                 "length_mi": round((length_ft or 0) / FT_PER_MILE, 3),
                 "From_km": fkm, "To_km": tkm,
                 "friction_aw": fric_aw, "pct_sectioned": pct_sect,
-                "d_skid": round(d_skid, 1) if d_skid is not None else None,
+                "d_friction": round(d_fric, 1) if d_fric is not None else None,
                 "n_segments": a["n"] if a else 0,
                 "n_friction": a["n_fric"] if a else 0,
             }
