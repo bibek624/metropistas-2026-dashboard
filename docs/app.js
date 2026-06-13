@@ -376,9 +376,7 @@ function renderStats() {
   $("#miles-table").innerHTML = `
     <tr><td>Total network</td><td>${t.total.toFixed(1)} mi</td></tr>
     <tr><td>Collected</td><td>${t.coll.toFixed(1)} mi</td></tr>
-    <tr><td>Sectioned</td><td>${t.sect.toFixed(1)} mi</td></tr>` +
-    (!state.road
-      ? `<tr><td>Off-network, all runs (ramps etc.)</td><td>${stats.line_off_network_mi.toFixed(1)} mi</td></tr>` : "");
+    <tr><td>Sectioned</td><td>${t.sect.toFixed(1)} mi</td></tr>`;
   renderRoadBars();
 }
 
