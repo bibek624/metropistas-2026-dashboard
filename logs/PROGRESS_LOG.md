@@ -1,5 +1,11 @@
 # Progress Log
 
+## 2026-06-12 — round 6 (user feedback)
+
+- Test-line tooltip now appears on HOVER (follows the cursor, no close button) instead of
+  click; an invisible 14–20 px hit band along each run means no pixel-precise aiming.
+  Clicks now always select the underlying segment/section (guard removed).
+
 ## 2026-06-12 — round 5 (user feedback)
 
 - Test-line labels removed from the map; clicking a line opens a MapLibre popup tooltip

@@ -132,12 +132,7 @@ async function init() {
       },
       layout: { visibility: lvl === state.level ? "visible" : "none" },
     });
-    map.on("click", lvl + "-fill", (e) => {
-      // a test-line click takes precedence over the polygon underneath it
-      if (map.getLayer("tl-line") &&
-          map.queryRenderedFeatures(e.point, { layers: ["tl-line"] }).length) return;
-      selectFeature(e.features[0].properties);
-    });
+    map.on("click", lvl + "-fill", (e) => selectFeature(e.features[0].properties));
     map.on("mouseenter", lvl + "-fill", () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", lvl + "-fill", () => (map.getCanvas().style.cursor = ""));
   }
@@ -170,9 +165,22 @@ async function init() {
     },
     layout: { "line-join": "round" },
   });
-  // clicking a run opens a tooltip popup right on the line (no always-on labels)
-  map.on("click", "tl-line", (e) => showLinePopup(e.features[0].properties, e.lngLat));
-  map.on("mouseenter", "tl-line", () => (map.getCanvas().style.cursor = "pointer"));
+  // wide invisible band so hovering a run doesn't need pixel precision
+  map.addLayer({
+    id: "tl-hit", type: "line", source: "tl-sel",
+    paint: { "line-color": "#000", "line-opacity": 0,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 7, 14, 13, 20] },
+    layout: { "line-cap": "round", "line-join": "round" },
+  });
+  // hovering a run shows its tooltip right on the line; it follows the cursor
+  map.on("mousemove", "tl-hit", (e) => {
+    map.getCanvas().style.cursor = "pointer";
+    showLinePopup(e.features[0].properties, e.lngLat);
+  });
+  map.on("mouseleave", "tl-hit", () => {
+    map.getCanvas().style.cursor = "";
+    hideLinePopup();
+  });
 
   // latest day's runs visible by default so test lines show without digging
   if (stats.days.length) {
@@ -280,7 +288,7 @@ function applyAll() {
   };
   map.getSource("tl-sel").setData(lineFC);
   // keep test lines (then the selection highlight) above every polygon layer
-  for (const id of ["tl-casing", "tl-line", "sel-outline"])
+  for (const id of ["tl-casing", "tl-line", "tl-hit", "sel-outline"])
     if (map.getLayer(id)) map.moveLayer(id);
 
   legendFor(state.mode, state.layer);
@@ -664,14 +672,20 @@ function showFeatureInfo(p) {
     </div>`);
 }
 
-let linePopup = null;
+let linePopup = null, linePopupKey = null;
+function hideLinePopup() {
+  if (linePopup) { linePopup.remove(); linePopup = null; linePopupKey = null; }
+}
 function showLinePopup(p, lngLat) {
+  if (linePopup && linePopupKey === p.key) { linePopup.setLngLat(lngLat); return; }
   let routes = [];
   try { routes = JSON.parse(p.routes || "[]"); } catch (e) { /* ignore */ }
   const rows = routes.map((r) =>
     `<tr><td>${r.route} (${r.network})</td><td>${r.mi} mi on network</td></tr>`).join("");
-  if (linePopup) linePopup.remove();
-  linePopup = new maplibregl.Popup({ maxWidth: "330px", offset: 10 })
+  hideLinePopup();
+  linePopupKey = p.key;
+  linePopup = new maplibregl.Popup({ maxWidth: "330px", offset: 14,
+    closeButton: false, closeOnClick: false })
     .setLngLat(lngLat)
     .setHTML(`
       <div class="tlp-title">${p.file}</div>
