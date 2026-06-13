@@ -147,6 +147,14 @@ details.card[open] summary { margin-bottom: 10px; }
 .ip-table td { padding: 2px 12px 2px 0; color: #44546a; }
 .ip-table td:first-child { color: #8a97a6; }
 
+/* ---------- test-line tooltip popup ---------- */
+.maplibregl-popup-content {
+  font-family: "Segoe UI", system-ui, sans-serif; border-radius: 10px;
+  box-shadow: 0 4px 18px #0d203a33; padding: 11px 26px 11px 13px;
+}
+.tlp-title { font-size: 12.5px; font-weight: 600; color: #1d2b3d; }
+.tlp-sub { font-size: 11px; color: #8a97a6; margin: 1px 0 6px; }
+
 #loading {
   position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
   background: #101c2ccc; color: #fff; font-size: 17px; z-index: 99;

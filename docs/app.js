@@ -58,7 +58,6 @@ async function init() {
     container: "map",
     style: {
       version: 8,
-      glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
       sources: {
         sat: {
           type: "raster",
@@ -133,10 +132,26 @@ async function init() {
       },
       layout: { visibility: lvl === state.level ? "visible" : "none" },
     });
-    map.on("click", lvl + "-fill", (e) => showFeatureInfo(e.features[0].properties));
+    map.on("click", lvl + "-fill", (e) => {
+      // a test-line click takes precedence over the polygon underneath it
+      if (map.getLayer("tl-line") &&
+          map.queryRenderedFeatures(e.point, { layers: ["tl-line"] }).length) return;
+      selectFeature(e.features[0].properties);
+    });
     map.on("mouseenter", lvl + "-fill", () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", lvl + "-fill", () => (map.getCanvas().style.cursor = ""));
   }
+
+  // highlight outline for the currently selected segment/section
+  map.addSource("sel", { type: "geojson", data: emptyFC() });
+  map.addLayer({
+    id: "sel-outline", type: "line", source: "sel",
+    paint: {
+      "line-color": "#16d8f2",
+      "line-width": ["interpolate", ["linear"], ["zoom"], 9, 2.5, 14, 4.5],
+    },
+    layout: { "line-join": "round" },
+  });
 
   // selected test lines live in their own source (setData – always reliable)
   map.addSource("tl-sel", { type: "geojson", data: emptyFC() });
@@ -155,24 +170,8 @@ async function init() {
     },
     layout: { "line-join": "round" },
   });
-  // labels live on a SEPARATE source: if the font CDN is unreachable the
-  // symbol tiles fail alone — the dashed lines above can never be affected
-  map.addSource("tl-lbl", { type: "geojson", data: emptyFC() });
-  map.addLayer({
-    id: "tl-label", type: "symbol", source: "tl-lbl",
-    layout: {
-      "symbol-placement": "line",
-      "text-field": ["concat", ["get", "day"], "  ·  ", ["get", "file"]],
-      "text-size": 10.5,
-      "text-font": ["Noto Sans Regular"],
-      "symbol-spacing": 400,
-    },
-    paint: { "text-color": "#1d2b3d", "text-halo-color": "#fff", "text-halo-width": 1.4 },
-  });
-  map.on("click", "tl-line", (e) => {
-    showLineInfo(e.features[0].properties);
-    e.originalEvent.cancelBubble = true;
-  });
+  // clicking a run opens a tooltip popup right on the line (no always-on labels)
+  map.on("click", "tl-line", (e) => showLinePopup(e.features[0].properties, e.lngLat));
   map.on("mouseenter", "tl-line", () => (map.getCanvas().style.cursor = "pointer"));
 
   // latest day's runs visible by default so test lines show without digging
@@ -232,12 +231,11 @@ function legendFor(mode, layer) {
   const add = (c, t) => rows.push(`<div class="legend-row"><span class="legend-swatch" style="background:${c}"></span>${t}</div>`);
   if (mode === "MFV") {
     add(C.none, "No MFV/IRI 2026 data yet");
-    rows.push(`<div class="legend-note">MFE/IRI sectioning has not started. These layers activate automatically once 2026 IRI values exist in the inventory.</div>`);
+    rows.push(`<div class="legend-note">MFE/IRI sectioning has not started. These views activate automatically once 2026 IRI values exist in the inventory.</div>`);
   } else if (layer === "friction") {
     FRICTION_STOPS.forEach(([v, c], i) => add(c,
       i === 0 ? `≤ ${v}` : i === FRICTION_STOPS.length - 1 ? `≥ ${v}` : String(v)));
     add(C.none, "No value yet");
-    rows.push(`<div class="legend-note">Friction number = floor(mean μ × 100), RFT 2026. Red = low friction (bad), green = good.</div>`);
   } else if (layer === "sectioned") {
     add(C.accent, "Sectioned — friction calculated");
     add(C.none, "Not sectioned yet");
@@ -281,9 +279,8 @@ function applyAll() {
       .map((f) => ({ ...f, properties: { ...f.properties, _color: dayColor(f.properties.day) } })),
   };
   map.getSource("tl-sel").setData(lineFC);
-  map.getSource("tl-lbl").setData(lineFC);
-  // keep test lines above every polygon layer, whatever else changed
-  for (const id of ["tl-casing", "tl-line", "tl-label"])
+  // keep test lines (then the selection highlight) above every polygon layer
+  for (const id of ["tl-casing", "tl-line", "sel-outline"])
     if (map.getLayer(id)) map.moveLayer(id);
 
   legendFor(state.mode, state.layer);
@@ -582,7 +579,24 @@ function showPanel(html) {
   $("#info-content").innerHTML = html;
   $("#info-panel").classList.add("open");
 }
-$("#info-close").addEventListener("click", () => $("#info-panel").classList.remove("open"));
+$("#info-close").addEventListener("click", () => {
+  $("#info-panel").classList.remove("open");
+  clearSelection();
+});
+
+function clearSelection() {
+  if (map && map.getSource("sel")) map.getSource("sel").setData(emptyFC());
+}
+
+/* highlight the clicked feature (full geometry from DATA, not the tile-clipped copy) */
+function selectFeature(p) {
+  const feats = DATA[state.level].features;
+  const f = state.level === "segments"
+    ? feats.find((x) => x.properties.SecID === p.SecID && x.properties.segment_id === p.segment_id)
+    : feats.find((x) => x.properties.SecID === p.SecID);
+  map.getSource("sel").setData(f ? { type: "FeatureCollection", features: [f] } : emptyFC());
+  showFeatureInfo(p);
+}
 
 function showFeatureInfo(p) {
   const isSeg = state.level === "segments";
@@ -650,21 +664,24 @@ function showFeatureInfo(p) {
     </div>`);
 }
 
-function showLineInfo(p) {
+let linePopup = null;
+function showLinePopup(p, lngLat) {
   let routes = [];
   try { routes = JSON.parse(p.routes || "[]"); } catch (e) { /* ignore */ }
   const rows = routes.map((r) =>
     `<tr><td>${r.route} (${r.network})</td><td>${r.mi} mi on network</td></tr>`).join("");
-  showPanel(`
-    <div class="ip-head">
-      <div class="ip-title">${p.file}</div>
-      <div class="ip-sub">Test run · ${p.day}</div>
-      <div class="ip-chips">
-        <span class="chip">Driven <b>${p.length_mi} mi</b></span>
-        ${routes.length ? "" : '<span class="chip">off-network (ramp / connector)</span>'}
-      </div>
-    </div>
-    ${rows ? `<table class="ip-table">${rows}</table>` : ""}`);
+  if (linePopup) linePopup.remove();
+  linePopup = new maplibregl.Popup({ maxWidth: "330px", offset: 10 })
+    .setLngLat(lngLat)
+    .setHTML(`
+      <div class="tlp-title">${p.file}</div>
+      <div class="tlp-sub">Test date ${p.day}</div>
+      <table class="ip-table">
+        <tr><td>Driven</td><td>${p.length_mi} mi</td></tr>
+        ${rows}
+      </table>
+      ${routes.length ? "" : '<div class="tlp-sub">off-network (ramp / connector)</div>'}`)
+    .addTo(map);
 }
 
 /* ===================== header toggles ===================== */
@@ -674,8 +691,8 @@ $("#network-toggle").addEventListener("click", (e) => {
   e.target.classList.add("active");
   state.net = e.target.dataset.net;
   if (state.road && !stats.networks[state.net].by_road[state.road]) state.road = "";
-  applyAll();
-  zoomToNetwork(state.net);
+  clearSelection();
+  applyAll();   // no zoom — only individual road clicks zoom
 });
 
 $("#level-toggle").addEventListener("click", (e) => {
@@ -683,6 +700,8 @@ $("#level-toggle").addEventListener("click", (e) => {
   $("#level-toggle .active").classList.remove("active");
   e.target.classList.add("active");
   state.level = e.target.dataset.level;
+  clearSelection();
+  $("#info-panel").classList.remove("open");
   applyAll();
 });
 
