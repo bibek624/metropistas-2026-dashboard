@@ -359,10 +359,10 @@ function gauge(svgId, pct, color) {
   const a = Math.PI * (1 - clamped / 100);
   const r = 80, cx = 100, cy = 100;
   const x = cx + r * Math.cos(a), y = cy - r * Math.sin(a);
-  const large = clamped > 50 ? 1 : 0;
+  // half-circle gauge: the value arc never exceeds 180°, so large-arc is always 0
   svg.innerHTML = `
     <path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}" stroke="#e8ecf1" stroke-width="15" fill="none" stroke-linecap="round"/>
-    ${clamped > 0 ? `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 ${large} 1 ${x} ${y}" stroke="${color}" stroke-width="15" fill="none" stroke-linecap="round"/>` : ""}
+    ${clamped > 0 ? `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${x} ${y}" stroke="${color}" stroke-width="15" fill="none" stroke-linecap="round"/>` : ""}
     <text x="${cx}" y="${cy - 8}" text-anchor="middle" font-size="27" font-weight="700" fill="${C.text}">${pct.toFixed(1)}%</text>`;
 }
 
