@@ -9,6 +9,7 @@
 </head>
 <body>
 <header>
+  <span id="brand"><img src="ara-logo.png" alt="ARA"></span>
   <h1>Metropistas 2026</h1>
   <div class="ctrl-group primary" id="mode-toggle">
     <button data-mode="RFT" class="active">RFT · Friction</button>
@@ -20,7 +21,7 @@
   </div>
   <div class="ctrl-group" id="level-toggle">
     <button data-level="segments" class="active">0.05-mi segments</button>
-    <button data-level="sections" title="Original .sec sections">Sections</button>
+    <button data-level="sections" title="The original pavement-management sections the 0.05-mi segments roll up to">Inventory sections</button>
   </div>
   <span id="updated"></span>
 </header>
@@ -67,6 +68,15 @@
   </aside>
 </div>
 
+<div id="gate" hidden>
+  <form id="gate-box">
+    <img src="ara-logo.png" alt="ARA">
+    <div class="g-title">Metropistas 2026 — Data Collection Dashboard</div>
+    <input type="password" id="gate-pw" placeholder="Enter password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <div id="gate-err"></div>
+  </form>
+</div>
 <div id="loading">Loading data…</div>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="app.js"></script>

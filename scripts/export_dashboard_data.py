@@ -31,6 +31,7 @@ GIS = r"D:\Projects\Metropistas_2026\GIS"
 ROOT = r"D:\Projects\Metropistas_2026\Data_Collection_Dashboard"
 INV_GDB = os.path.join(GIS, "Inventory_2026.gdb")
 LINES_GDB = os.path.join(GIS, "RFT_Test_Lines_2026.gdb")
+MFV_DIR = r"D:\Projects\Metropistas_2026\Raw Data\020 MFV\Extracted Data"
 DATA_DIR = os.path.join(ROOT, "docs", "data")
 LOG_DIR = os.path.join(ROOT, "logs")
 
@@ -285,6 +286,91 @@ def export_testlines(footprints, inv_sr, group_of):
     return days, collected_by_road
 
 
+def export_mfv_testlines(footprints, inv_sr, group_of):
+    """Build MFV test lines from the daily 20-ft-interval CSVs in MFV_DIR.
+
+    Each row is one 20-ft interval with begin/end WGS84 coordinates. Lines are
+    downsampled to ~100 ft (every 5th point) for speed; driven length comes
+    from the measured intervals, not the geometry. Returns (days, collected).
+    """
+    import csv as csvmod
+    import glob
+    sr_wgs = arcpy.SpatialReference(4326)
+    # main per-day exports only — not the Faulting/Inertial/Events/ERRORS files
+    skip_re = re.compile(r"(?i)faulting|inertial|event|error")
+    features = []
+    days = []
+    collected_by_road = defaultdict(float)
+    by_day = {}   # day -> {fname -> {"pts", "ft", "last"}}; merges AM/PM files
+    for path in sorted(glob.glob(os.path.join(MFV_DIR, "*.csv"))):
+        base = os.path.basename(path)
+        if skip_re.search(base):
+            continue
+        m = re.search(r"(\d{4})[_-](\d{2})[_-](\d{2})", base)
+        if not m:
+            log("MFV: skipping unrecognized file " + base)
+            continue
+        day = "-".join(m.groups())
+        runs = by_day.setdefault(day, {})
+        with open(path, newline="") as f:
+            for row in csvmod.DictReader(f):
+                fname = (row.get("RSP_FileName") or "").strip()
+                if not fname:
+                    continue
+                try:
+                    pt = (float(row["BeginLongitude"]), float(row["BeginLatitude"]))
+                    end = (float(row["EndLongitude"]), float(row["EndLatitude"]))
+                    ft = float(row["EndInterval"]) - float(row["BeginInterval"])
+                except (TypeError, ValueError, KeyError):
+                    continue
+                r = runs.setdefault(fname, {"pts": [], "ft": 0.0, "last": None})
+                r["pts"].append(pt)
+                r["last"] = end
+                r["ft"] += ft
+    for day in sorted(by_day):
+        files = []
+        for fname, r in by_day[day].items():
+            pts = r["pts"][::5]                      # 20 ft -> ~100 ft spacing
+            if r["last"]:
+                pts.append(r["last"])
+            if len(pts) < 2:
+                continue
+            line = arcpy.Polyline(
+                arcpy.Array([arcpy.Point(x, y) for x, y in pts]), sr_wgs)
+            utm = line.projectAs(inv_sr)
+            length_mi = r["ft"] / FT_PER_MILE
+            parts = []
+            for nid, foot in footprints.items():
+                if utm.disjoint(foot):
+                    continue
+                mi = utm.intersect(foot, 2).length / M_PER_MILE
+                if mi > 0.005:
+                    parts.append({"route": nid, "network": group_of[nid],
+                                  "mi": round(mi, 2)})
+                    collected_by_road[nid] += mi
+            parts.sort(key=lambda p: -p["mi"])
+            route = parts[0]["route"] if parts else None
+            features.append({
+                "type": "Feature",
+                "geometry": geom_to_geojson(utm, generalize_m=2.0),
+                "properties": {
+                    "key": day + "|" + fname, "day": day, "file": fname,
+                    "length_mi": round(length_mi, 2),
+                    "route": route,
+                    "routes": json.dumps(parts),
+                },
+            })
+            files.append({"file": fname, "length_mi": round(length_mi, 2),
+                          "route": route, "networks": parts})
+        files.sort(key=lambda x: x["file"])
+        days.append({"day": day,
+                     "total_mi": round(sum(f["length_mi"] for f in files), 2),
+                     "n_files": len(files), "files": files})
+    days.sort(key=lambda d: d["day"])
+    write_geojson(os.path.join(DATA_DIR, "testlines_MFV.geojson"), features)
+    return days, collected_by_road
+
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(LOG_DIR, exist_ok=True)
@@ -302,6 +388,9 @@ def main():
     footprints, inv_sr = build_footprints()
     days, collected_by_road = export_testlines(footprints, inv_sr, group_of)
 
+    log("building MFV test lines from 20-ft CSVs ...")
+    mfv_days, mfv_collected = export_mfv_testlines(footprints, inv_sr, group_of)
+
     line_total = round(sum(d["total_mi"] for d in days), 2)
     on_network = round(sum(collected_by_road.values()), 2)
 
@@ -318,10 +407,19 @@ def main():
         g["pct_sectioned"] = round(100 * sect / tot, 1) if tot else 0
         g["pct_collected"] = round(100 * min(coll, tot) / tot, 1) if tot else 0
 
+    mfv_total = round(sum(d["total_mi"] for d in mfv_days), 2)
+    stats_mfv = {
+        "days": mfv_days,
+        "by_road": {nid: round(mi, 2) for nid, mi in mfv_collected.items()},
+        "line_total_mi": mfv_total,
+        "line_on_network_mi": round(sum(mfv_collected.values()), 2),
+    }
+
     stats = {
         "generated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
         "networks": networks,
         "days": days,
+        "mfv": stats_mfv,
         "line_total_mi": line_total,
         "line_on_network_mi": on_network,
         "line_off_network_mi": round(line_total - on_network, 2),

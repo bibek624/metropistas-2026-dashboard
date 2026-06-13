@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-12 17:58",
+ "generated": "2026-06-12 18:18",
  "networks": {
   "AMPR": {
    "by_road": {
@@ -1065,6 +1065,2545 @@
    ]
   }
  ],
+ "mfv": {
+  "days": [
+   {
+    "day": "2026-06-04",
+    "total_mi": 15.02,
+    "n_files": 28,
+    "files": [
+     {
+      "file": "PR137_NB_LN2_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.46,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.42
+       }
+      ]
+     },
+     {
+      "file": "PR140_WB_LN1_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.39
+       }
+      ]
+     },
+     {
+      "file": "PR140_WB_On_Ramp_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.38,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.38
+       }
+      ]
+     },
+     {
+      "file": "PR149_NB_LN1_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.46,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.42
+       }
+      ]
+     },
+     {
+      "file": "PR149_NB_LN2_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.46,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.45
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR137_SB_LN2.RSP",
+      "length_mi": 0.5,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.46
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR140_Off_Ramp.RSP",
+      "length_mi": 0.52,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.52
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR160_Off_Ramp_.RSP",
+      "length_mi": 0.5,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.5
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR22_EB_LN2_02.RSP",
+      "length_mi": 0.59,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.59
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR2_EB_Off_Ramp.RSP",
+      "length_mi": 0.81,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.29
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR6140_EB_Off_Ramp_LN1.RSP",
+      "length_mi": 0.23,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR659_EB_Off_Ramp.RSP",
+      "length_mi": 0.16,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR694_Off_Ramp.RSP",
+      "length_mi": 0.61,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.61
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_PR149_SB_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.39
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR140_Off_Ramp_LN1.RSP",
+      "length_mi": 0.16,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR160_Off_Ramp.RSP",
+      "length_mi": 0.54,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.54
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR6140_SB_LN3.RSP",
+      "length_mi": 0.01,
+      "route": null,
+      "networks": []
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR690_Off_Ramp.RSP",
+      "length_mi": 0.3,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_Toll_LN1_To_PR165_NB_LN2.RSP",
+      "length_mi": 0.18,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_On_Ramp_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.49,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.49
+       }
+      ]
+     },
+     {
+      "file": "PR2_On_Ramp_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.32,
+      "route": null,
+      "networks": []
+     },
+     {
+      "file": "PR2_WB_On_Ramp_To_PR22_WB_Toll_LN1.RSP",
+      "length_mi": 0.28,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.28
+       }
+      ]
+     },
+     {
+      "file": "PR6140_NB_On_Ramp_LN1.RSP",
+      "length_mi": 0.05,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR6140_WB_Off_Ramp_LN1.RSP",
+      "length_mi": 0.05,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR659_NB_On_Ramp_LN1_To_PR22_EB_LN4.RSP",
+      "length_mi": 5.01,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 4.18
+       }
+      ]
+     },
+     {
+      "file": "PR694_On_Ramp_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.27,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.27
+       }
+      ]
+     },
+     {
+      "file": "PR866_On_Ramp_LN1_To_PR22_WB_LN3.RSP",
+      "length_mi": 0.32,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "WB_On_Ramp_To_PR22_WB_LN3_To_PR683_Off_Ramp.RSP",
+      "length_mi": 0.58,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.58
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "day": "2026-06-05",
+    "total_mi": 128.53,
+    "n_files": 9,
+    "files": [
+     {
+      "file": "PR165_WB_On_Ramp_To_PR22_WB_LN3_To_Off_Ramp.RSP",
+      "length_mi": 1.17,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.38
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN2_To_PR22_WB_LN1.RSP",
+      "length_mi": 51.29,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 45.41
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_C_Juan_Kalaf_Off_Ramp.RSP",
+      "length_mi": 0.06,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.06
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR22_EB_LN4.RSP",
+      "length_mi": 0.69,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.68
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR24_EB_Off_Ramp.RSP",
+      "length_mi": 0.15,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.12
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN3_To_PR165_SB_LN15.RSP",
+      "length_mi": 13.88,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 12.83
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_LN3_To_PR22_EB_LN2_To_PR18_SB_LN5.RSP",
+      "length_mi": 51.15,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 45.36
+       }
+      ]
+     },
+     {
+      "file": "PR2_NB_LN4_To_Ave_de_Diego_EB_Off_Ramp.RSP",
+      "length_mi": 1.38,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.35
+       }
+      ]
+     },
+     {
+      "file": "PR659_NB_On_Ramp_LN1_To_PR22_EB_LN4.RSP",
+      "length_mi": 8.76,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 7.54
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "day": "2026-06-06",
+    "total_mi": 125.39,
+    "n_files": 43,
+    "files": [
+     {
+      "file": "Ave_Zinia_NB_LN1_To_PR5_NB_LN2.RSP",
+      "length_mi": 0.61,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.59
+       }
+      ]
+     },
+     {
+      "file": "PR165_On_Ramp_To_PR22_EB_LN3.RSP",
+      "length_mi": 0.35,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "PR167_EB_Off_Ramp_LN1.RSP",
+      "length_mi": 0.32,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "PR167_EB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.54,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.54
+       }
+      ]
+     },
+     {
+      "file": "PR167_WB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.74,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.73
+       }
+      ]
+     },
+     {
+      "file": "PR174_WB_LN2_To_PR5_NB_LN3.RSP",
+      "length_mi": 0.24,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN1_To_PR22_WB_LN1_To_PR2_Off_Ramp_LN1.RSP",
+      "length_mi": 2.18,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 2.04
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN8.RSP",
+      "length_mi": 0.22,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.19
+       }
+      ]
+     },
+     {
+      "file": "PR199_WB_LN1_To_PR5_NB_LN2.RSP",
+      "length_mi": 0.06,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.06
+       }
+      ]
+     },
+     {
+      "file": "PR1_WB_DC_LN2_To_PR22_EB_LN4.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.2
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_PR18_SB_LN4.RSP",
+      "length_mi": 0.32,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.31
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR22_EB_Toll_LN2.RSP",
+      "length_mi": 0.54,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.54
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR24_NB_LN2.RSP",
+      "length_mi": 0.21,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.19
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR869_EB_Off_Ramp_LN1.RSP",
+      "length_mi": 0.41,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.41
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN5_To_PR1_EB_LN3.RSP",
+      "length_mi": 0.28,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_On_Ramp_at_PR5_LN1.RSP",
+      "length_mi": 0.38,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.36
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Toll_LN3.RSP",
+      "length_mi": 0.38,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.38
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Toll_LN4.RSP",
+      "length_mi": 0.36,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.36
+       }
+      ]
+     },
+     {
+      "file": "PR22_NB_DC_LN1_To_PR22_WB_On_Ramp_LN1.RSP",
+      "length_mi": 0.84,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.69
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN1_To_PR2_WB_LN3.RSP",
+      "length_mi": 46.22,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 40.69
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN3_To_PR22_WB_LN3.RSP",
+      "length_mi": 0.47,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.47
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN3_To_PR866_Off_Ramp_LN1.RSP",
+      "length_mi": 0.07,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.07
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN3_To_PR866_Off_Ramp_LN2.RSP",
+      "length_mi": 0.21,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.21
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN4_To_PR5_Off_Ramp_LN1.RSP",
+      "length_mi": 0.27,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.27
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN4_To_PR869_Off_Ramp_LN1.RSP",
+      "length_mi": 0.17,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR24_EB_On_Ramp_To_PR2_EB_Off_Ramp.RSP",
+      "length_mi": 0.57,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.57
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_LN2_To_PR22_EB_LN3.RSP",
+      "length_mi": 51.02,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 45.28
+       }
+      ]
+     },
+     {
+      "file": "PR2_NB_LN3_To_PR22_WB_LN4.RSP",
+      "length_mi": 1.76,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.63
+       }
+      ]
+     },
+     {
+      "file": "PR2_SB_LN4_To_PR24_NB_LN3.RSP",
+      "length_mi": 1.14,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.98
+       }
+      ]
+     },
+     {
+      "file": "PR5_HOV_SB_LN1.RSP",
+      "length_mi": 2.25,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 2.21
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN1.RSP",
+      "length_mi": 2.38,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 2.32
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2.RSP",
+      "length_mi": 2.39,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 2.33
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2_To_Ave_Santa_Juanita_Off_Ramp.RSP",
+      "length_mi": 0.28,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.28
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2_To_Ave_Zinia_Off_Ramp.RSP",
+      "length_mi": 0.18,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2_To_PR174_NB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.11,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.11
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2_To_PR22_EB_LN4.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.39
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN1.RSP",
+      "length_mi": 2.4,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 2.33
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN2.RSP",
+      "length_mi": 2.39,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 2.32
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN2_To_PR22_EB_On_Ramp_LN2.RSP",
+      "length_mi": 0.24,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.21
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN3_To_PR174_Off_Ramp.RSP",
+      "length_mi": 0.35,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "PR866_EB_On_Ramp_LN1_To_PR22_EB_LN3.RSP",
+      "length_mi": 0.3,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR869_EB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.23,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.23
+       }
+      ]
+     },
+     {
+      "file": "PR869_On_Ramp_To_PR22_WB_LN4.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.31
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "day": "2026-06-08",
+    "total_mi": 52.08,
+    "n_files": 83,
+    "files": [
+     {
+      "file": "1.RSP",
+      "length_mi": 0.43,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "Ave_PR_865_On_Ramp_LN1_To_PR22_WB_LN3.RSP",
+      "length_mi": 0.22,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.21
+       }
+      ]
+     },
+     {
+      "file": "C_Sofia_NB_On_Ramp_To_PR5_NB_LN2.RSP",
+      "length_mi": 0.17,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.17
+       }
+      ]
+     },
+     {
+      "file": "C_Venezuela_Off_Ramp_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.24,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "On_Ramp_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.25,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.25
+       }
+      ]
+     },
+     {
+      "file": "PR10_NB_LN2_To_PR10_SB_LN2.RSP",
+      "length_mi": 0.59,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.54
+       }
+      ]
+     },
+     {
+      "file": "PR10_NB_LN2_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.34,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "PR10_SB_LN2_To_PR10_NB_LN2.RSP",
+      "length_mi": 0.56,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.51
+       }
+      ]
+     },
+     {
+      "file": "PR10_SB_LN2_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.26,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.25
+       }
+      ]
+     },
+     {
+      "file": "PR129_NB_LN2_To_PR129_SB_LN2.RSP",
+      "length_mi": 0.57,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.51
+       }
+      ]
+     },
+     {
+      "file": "PR129_NB_LN2_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.47,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.44
+       }
+      ]
+     },
+     {
+      "file": "PR129_SB_LN2_To_PR129_NB_LN2.RSP",
+      "length_mi": 0.59,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.53
+       }
+      ]
+     },
+     {
+      "file": "PR129_SB_LN2_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.37
+       }
+      ]
+     },
+     {
+      "file": "PR137_On_Ramp_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.35,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.35
+       }
+      ]
+     },
+     {
+      "file": "PR137_SB_LN2_To_PR137_NB_LN2.RSP",
+      "length_mi": 0.6,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.57
+       }
+      ]
+     },
+     {
+      "file": "PR165_NB_LN2_To_PR22_EB_LN3.RSP",
+      "length_mi": 0.3,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.26
+       }
+      ]
+     },
+     {
+      "file": "PR167_EB_Off_Ramp_LN3.RSP",
+      "length_mi": 0.51,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.5
+       }
+      ]
+     },
+     {
+      "file": "PR174_SB_On_Ramp_To_PR5_SB_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.38
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN3_To_PR22_EB_LN2.RSP",
+      "length_mi": 1.52,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.25
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN4_To_PR22_EB_LN3.RSP",
+      "length_mi": 1.53,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.25
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN5_To_PR22_EB_LN5.RSP",
+      "length_mi": 1.0,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.82
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN6_To_PR22_EB_LN6.RSP",
+      "length_mi": 0.56,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.54
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_LN7.RSP",
+      "length_mi": 0.22,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.2
+       }
+      ]
+     },
+     {
+      "file": "PR1_EB_LN3_To_PR22_EB_LN4.RSP",
+      "length_mi": 0.27,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR1_EB_LN4_To_PR22_WB_LN4_To_PR167_Off_Ramp_LN1.RSP",
+      "length_mi": 7.34,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 6.56
+       }
+      ]
+     },
+     {
+      "file": "PR1_EB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.14,
+      "route": null,
+      "networks": []
+     },
+     {
+      "file": "PR1_WB_DC_LN1_To_PR22_WB_LN1_To_PR18_SB_LN1.RSP",
+      "length_mi": 1.36,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.88
+       }
+      ]
+     },
+     {
+      "file": "PR22_DT_LN1_02.RSP",
+      "length_mi": 6.41,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 6.3
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN1_To_PR2_NB_Exit.RSP",
+      "length_mi": 0.36,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.33
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_Ave_Domingo_Ruiz_Off_Ramp.RSP",
+      "length_mi": 0.66,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.66
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR10_SB_LN2.RSP",
+      "length_mi": 0.35,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.34
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR129_SB_LN2.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR1_WB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.07,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN2_To_PR22_EB_LN2_01.RSP",
+      "length_mi": 0.51,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.51
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_C_Europa_Off_Ramp.RSP",
+      "length_mi": 0.15,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.08
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.37,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.37
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_PR865_Off_Ramp_LN1.RSP",
+      "length_mi": 0.09,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.09
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN3_To_PR866_EB_Off_Ramp.RSP",
+      "length_mi": 0.24,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN4_To_PR165_EB_Off_Ramp.RSP",
+      "length_mi": 0.19,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.19
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Off_Ramp_To_Access_Road.RSP",
+      "length_mi": 0.22,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.22
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Toll_LN2_01.RSP",
+      "length_mi": 0.25,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.25
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Toll_LN2_02.RSP",
+      "length_mi": 0.32,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.32
+       }
+      ]
+     },
+     {
+      "file": "PR22_NB_DC_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.38
+       }
+      ]
+     },
+     {
+      "file": "PR22_SB_DC_LN1_To_PR1_EB_LN3.RSP",
+      "length_mi": 0.57,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.4
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN1_To_PR18_SB_LN2.RSP",
+      "length_mi": 1.56,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.11
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_Ave_Domingo_Ruiz_Off_Ramp.RSP",
+      "length_mi": 0.69,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.69
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_C_Venezuela_Off_Ramp.RSP",
+      "length_mi": 0.16,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR10_NB_LN2.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR129_NB_LN3.RSP",
+      "length_mi": 0.28,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.27
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR137_Off_Ramp.RSP",
+      "length_mi": 0.29,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.29
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR140_SB_LN2.RSP",
+      "length_mi": 0.06,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR149_SB_LN2.RSP",
+      "length_mi": 0.28,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR18_SB_LN3.RSP",
+      "length_mi": 1.56,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 1.11
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR22_WB_LN4.RSP",
+      "length_mi": 0.62,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.58
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR2_EB_LN3.RSP",
+      "length_mi": 0.33,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.31
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR2_Off_Ramp.RSP",
+      "length_mi": 0.58,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.21
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR6140_SB_LN3.RSP",
+      "length_mi": 0.29,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_PR694_Off_Ramp.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.31
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN2_To_WB_Toll_LN2_To_PR686_Off_Ramp.RSP",
+      "length_mi": 0.87,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.87
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN3.RSP",
+      "length_mi": 0.48,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.47
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN4_To_Ave_De_Diego_Off_Ramp.RSP",
+      "length_mi": 4.04,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 3.76
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_LN4_To_PR24_SB_LN3.RSP",
+      "length_mi": 0.23,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.22
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_Toll_LN1.RSP",
+      "length_mi": 0.35,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.35
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_Toll_LN3_01.RSP",
+      "length_mi": 0.25,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.25
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_Toll_LN3_02.RSP",
+      "length_mi": 0.23,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.22
+       }
+      ]
+     },
+     {
+      "file": "PR22_WB_Toll_LN3_03.RSP",
+      "length_mi": 0.19,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.19
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_LN2_To_PR22_WB_LN2.RSP",
+      "length_mi": 0.39,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.35
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_On_Ramp_Ln2.RSP",
+      "length_mi": 0.29,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.15
+       }
+      ]
+     },
+     {
+      "file": "PR2_EB_On_Ramp_To_PR5_SB_LN3.RSP",
+      "length_mi": 0.26,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR2_Off_Ramp_LN2.RSP",
+      "length_mi": 0.3,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.27
+       }
+      ]
+     },
+     {
+      "file": "PR2_WB_LN2_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.46,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.39
+       }
+      ]
+     },
+     {
+      "file": "PR35_EB_LN3_To_PR22_WB_LN4.RSP",
+      "length_mi": 0.42,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.4
+       }
+      ]
+     },
+     {
+      "file": "PR5_HOV_NB_LN1.RSP",
+      "length_mi": 1.47,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 1.44
+       }
+      ]
+     },
+     {
+      "file": "PR5_HOV_NB_On_Ramp.RSP",
+      "length_mi": 0.19,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "PR5_HOV_SB_Off_Ramp.RSP",
+      "length_mi": 0.16,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.16
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN1_To_PR2_WB_On_Ramp_LN1.RSP",
+      "length_mi": 0.07,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.07
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN1_To_PR2_WB_On_Ramp_LN2.RSP",
+      "length_mi": 0.07,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.07
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN2_To_PR174_NB_Off_Ramp_LN1.RSP",
+      "length_mi": 0.09,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.09
+       }
+      ]
+     },
+     {
+      "file": "PR5_NB_LN3_To_PR2_EB_Off_Ramp.RSP",
+      "length_mi": 0.06,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN3_To_Ave_Los_Millones_Off_Ramp.RSP",
+      "length_mi": 0.46,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.46
+       }
+      ]
+     },
+     {
+      "file": "PR5_SB_LN3_To_Ave_Santa_Juanita_Off_Ramp.RSP",
+      "length_mi": 0.42,
+      "route": "MTSPR5",
+      "networks": [
+       {
+        "route": "MTSPR5",
+        "network": "AMPR",
+        "mi": 0.41
+       }
+      ]
+     },
+     {
+      "file": "PR6140_EB_Off_Ramp_LN2.RSP",
+      "length_mi": 0.07,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.05
+       }
+      ]
+     },
+     {
+      "file": "PR686_On_Ramp_To_PR22_EB_LN2.RSP",
+      "length_mi": 0.31,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.31
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "day": "2026-06-09",
+    "total_mi": 201.3,
+    "n_files": 20,
+    "files": [
+     {
+      "file": "PR18_DT_LN2.RSP",
+      "length_mi": 10.81,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 8.83
+       },
+       {
+        "route": "MTSPR18",
+        "network": "PRTR",
+        "mi": 1.62
+       }
+      ]
+     },
+     {
+      "file": "PR18_NB_Ramp_LN1.RSP",
+      "length_mi": 0.89,
+      "route": "MTSPR18",
+      "networks": [
+       {
+        "route": "MTSPR18",
+        "network": "PRTR",
+        "mi": 0.5
+       },
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.03
+       }
+      ]
+     },
+     {
+      "file": "PR52_DT_LN1.RSP",
+      "length_mi": 10.67,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 8.71
+       },
+       {
+        "route": "MTSPR18",
+        "network": "PRTR",
+        "mi": 1.62
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_LN1_To_PR52_NB_LN2.RSP",
+      "length_mi": 9.5,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 9.15
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_LN1_To_PR52_NB_LN3.RSP",
+      "length_mi": 51.76,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 49.16
+       },
+       {
+        "route": "MTSPR53B",
+        "network": "PRTR",
+        "mi": 0.5
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_LN1_To_PR52_NB_LN3_02.RSP",
+      "length_mi": 15.34,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 14.84
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_Off_Ramp_24_LN1.RSP",
+      "length_mi": 0.61,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.6
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_Off_Ramp_25_LN0.RSP",
+      "length_mi": 0.6,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.44
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_Off_Ramp_25_LN1.RSP",
+      "length_mi": 0.34,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.33
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_On_Ramp_14_LN1_To_PR52_NB_LN3_To_PR52_NB_Off_Ramp_21_LN1.RSP",
+      "length_mi": 10.15,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 9.82
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_On_Ramp_21_LN1_To_PR52_NB_LN3.RSP",
+      "length_mi": 1.45,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 1.42
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_On_Ramp_21_LN1_To_PR52_NB_Off_Ramp_21_LN1.RSP",
+      "length_mi": 0.41,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.4
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_On_Ramp_25_LN2.RSP",
+      "length_mi": 0.1,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.09
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN1.RSP",
+      "length_mi": 4.32,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 4.09
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN1_02.RSP",
+      "length_mi": 5.57,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 5.41
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN1_03.RSP",
+      "length_mi": 58.01,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 54.96
+       },
+       {
+        "route": "MTSPR53B",
+        "network": "PRTR",
+        "mi": 0.45
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN3.RSP",
+      "length_mi": 9.33,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 8.94
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN4.RSP",
+      "length_mi": 1.25,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 1.15
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_On_Ramp_21_LN1_To_PR52_SB_LN3_To_PR52_SB_Off_Ramp_14_LN1.RSP",
+      "length_mi": 5.68,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 5.51
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_On_Ramp_21_LN1_To_PR52_SB_LN3_To_PR52_SB_Off_Ramp_14_LN1_02.RSP",
+      "length_mi": 4.51,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 4.25
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "day": "2026-06-10",
+    "total_mi": 159.19,
+    "n_files": 23,
+    "files": [
+     {
+      "file": "PR18_SB_Ramp_LN1.RSP",
+      "length_mi": 0.32,
+      "route": null,
+      "networks": []
+     },
+     {
+      "file": "PR20_NB_Off_Ramp_03_LN1.RSP",
+      "length_mi": 0.19,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.19
+       }
+      ]
+     },
+     {
+      "file": "PR20_NB_Off_Ramp_04_LN1.RSP",
+      "length_mi": 0.16,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.14
+       }
+      ]
+     },
+     {
+      "file": "PR20_NB_On_Ramp_02_LN1.RSP",
+      "length_mi": 0.69,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.68
+       }
+      ]
+     },
+     {
+      "file": "PR20_NB_On_Ramp_03_LN2.RSP",
+      "length_mi": 0.26,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.26
+       }
+      ]
+     },
+     {
+      "file": "PR20_NB_On_Ramp_05_LN1.RSP",
+      "length_mi": 1.4,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 1.34
+       }
+      ]
+     },
+     {
+      "file": "PR20_SB_Off_Ramp_02_LN2.RSP",
+      "length_mi": 0.13,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.11
+       }
+      ]
+     },
+     {
+      "file": "PR20_SB_On_Ramp_03_LN1.RSP",
+      "length_mi": 0.3,
+      "route": "MTSPR20",
+      "networks": [
+       {
+        "route": "MTSPR20",
+        "network": "PRTR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN1_To_RP1_WB_LN4.RSP",
+      "length_mi": 2.86,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 2.74
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_LN1_To_RP1_WB_LN4_02.RSP",
+      "length_mi": 3.06,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 2.83
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_On_Ramp_02_LN1.RSP",
+      "length_mi": 15.03,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 13.34
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_On_Ramp_02_LN1_02.RSP",
+      "length_mi": 0.4,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.4
+       }
+      ]
+     },
+     {
+      "file": "PR22_EB_Toll_LN2_02.RSP",
+      "length_mi": 0.25,
+      "route": "MTSPR22",
+      "networks": [
+       {
+        "route": "MTSPR22",
+        "network": "AMPR",
+        "mi": 0.24
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_LN2_To_PR52_NB_Off_Ramp_23_LN1.RSP",
+      "length_mi": 65.65,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 62.65
+       },
+       {
+        "route": "MTSPR53B",
+        "network": "PRTR",
+        "mi": 0.55
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_Off_Ramp_24_LN2.RSP",
+      "length_mi": 0.19,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.18
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_Off_Ramp_26_LN1.RSP",
+      "length_mi": 0.21,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.04
+       }
+      ]
+     },
+     {
+      "file": "PR52_NB_On_Ramp_23_LN1.RSP",
+      "length_mi": 0.48,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.48
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN2.RSP",
+      "length_mi": 15.31,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 14.84
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN2_02.RSP",
+      "length_mi": 14.4,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 13.73
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_LN2_03.RSP",
+      "length_mi": 37.24,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 35.29
+       },
+       {
+        "route": "MTSPR53B",
+        "network": "PRTR",
+        "mi": 0.44
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_Off_Ramp_23_LN2.RSP",
+      "length_mi": 0.34,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.3
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_On_Ramp_24_LN1.RSP",
+      "length_mi": 0.26,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.26
+       }
+      ]
+     },
+     {
+      "file": "PR52_SB_On_Ramp_25_LN2.RSP",
+      "length_mi": 0.06,
+      "route": "MTSPR52",
+      "networks": [
+       {
+        "route": "MTSPR52",
+        "network": "PRTR",
+        "mi": 0.03
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "by_road": {
+   "MTSPR22": 288.72,
+   "MTSPR5": 17.01,
+   "MTSPR18": 3.74,
+   "MTSPR52": 315.9,
+   "MTSPR53B": 1.94,
+   "MTSPR20": 3.01
+  },
+  "line_total_mi": 681.51,
+  "line_on_network_mi": 630.31
+ },
  "line_total_mi": 362.76,
  "line_on_network_mi": 321.0,
  "line_off_network_mi": 41.76,

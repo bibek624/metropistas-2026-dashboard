@@ -5,9 +5,9 @@ const GROUPS = ["AMPR", "PRTR"];
 const DAY_COLORS = ["#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4",
   "#46f0f0", "#f032e6", "#bcf60c", "#008080", "#9a6324", "#800000", "#000075"];
 
-const C = {                 // palette — neutral grays + blue/amber accents
+const C = {                 // palette — neutral grays + ARA navy/amber accents
   none: "#d5d9de",          // no data / not sectioned
-  accent: "#2e86de",        // sectioned / positive highlight
+  accent: "#2456a6",        // sectioned / positive highlight (ARA navy)
   amber: "#f0a93b",         // collected
   text: "#1d2b3d",
 };
@@ -90,16 +90,18 @@ async function init() {
   // register before the data fetches so a 'load' fired mid-fetch can't be missed
   const mapReady = new Promise((res) => map.once("load", res));
 
-  const [segA, segP, secA, secP, lines] = await Promise.all([
+  const [segA, segP, secA, secP, lines, linesM] = await Promise.all([
     loadJSON("data/segments_AMPR.geojson"),
     loadJSON("data/segments_PRTR.geojson"),
     loadJSON("data/sections_AMPR.geojson"),
     loadJSON("data/sections_PRTR.geojson"),
     loadJSON("data/testlines.geojson"),
+    loadJSON("data/testlines_MFV.geojson").catch(() => emptyFC()),
   ]);
   DATA.segments = mergeFC(segA, segP);
   DATA.sections = mergeFC(secA, secP);
   DATA.lines = lines;
+  DATA.linesMFV = linesM;
 
   await mapReady;
 
@@ -182,12 +184,7 @@ async function init() {
     hideLinePopup();
   });
 
-  // latest day's runs visible by default so test lines show without digging
-  if (stats.days.length) {
-    const last = stats.days[stats.days.length - 1];
-    state.dayOn.add(last.day);
-    last.files.forEach((f) => state.runSel.add(last.day + "|" + f.file));
-  }
+  selectAllRuns();   // every day's test lines visible by default
 
   $("#tl-toggle").addEventListener("change", (e) => {
     state.showLines = e.target.checked;
@@ -259,6 +256,25 @@ function legendFor(mode, layer) {
 
 const dayColor = (day) => DAY_COLORS[dayIndex(day) % DAY_COLORS.length];
 
+/* ---- mode-aware data: RFT (GDB test lines) vs MFV (20-ft CSV lines) ---- */
+const modeDays = () => state.mode === "MFV"
+  ? ((stats.mfv && stats.mfv.days) || []) : stats.days;
+const modeLines = () => (state.mode === "MFV" ? DATA.linesMFV : DATA.lines) || emptyFC();
+function roadProgress(g, r) {
+  const v = stats.networks[g].by_road[r];
+  if (state.mode === "MFV")   // MFV: collected known, nothing sectioned yet
+    return { total: v.total_mi, coll: (stats.mfv && stats.mfv.by_road[r]) || 0, sect: 0 };
+  return { total: v.total_mi, coll: v.collected_mi, sect: v.sectioned_mi };
+}
+function selectAllRuns() {
+  state.dayOn = new Set();
+  state.runSel = new Set();
+  for (const d of modeDays()) {
+    state.dayOn.add(d.day);
+    d.files.forEach((f) => state.runSel.add(d.day + "|" + f.file));
+  }
+}
+
 /* ===================== apply state ===================== */
 function featureFilter() {
   const f = ["all"];
@@ -282,7 +298,7 @@ function applyAll() {
 
   const lineFC = {
     type: "FeatureCollection",
-    features: !state.showLines ? [] : DATA.lines.features
+    features: !state.showLines ? [] : modeLines().features
       .filter((f) => state.runSel.has(f.properties.key))
       .map((f) => ({ ...f, properties: { ...f.properties, _color: dayColor(f.properties.day) } })),
   };
@@ -336,7 +352,11 @@ $("#mode-toggle").addEventListener("click", (e) => {
   $("#mode-toggle .active").classList.remove("active");
   e.target.classList.add("active");
   state.mode = e.target.dataset.mode;
+  clearSelection();
+  $("#info-panel").classList.remove("open");
+  selectAllRuns();        // swap to this mode's runs (RFT GDB lines / MFV CSV lines)
   buildLayerList();
+  buildTestlinePanel();
   applyAll();
 });
 
@@ -346,9 +366,9 @@ function netTotals() {
     : Object.keys(stats.networks[state.net].by_road);
   const t = { total: 0, coll: 0, sect: 0 };
   for (const r of roads) {
-    const v = stats.networks[state.net].by_road[r];
-    if (!v) continue;
-    t.total += v.total_mi; t.coll += v.collected_mi; t.sect += v.sectioned_mi;
+    if (!stats.networks[state.net].by_road[r]) continue;
+    const p = roadProgress(state.net, r);
+    t.total += p.total; t.coll += p.coll; t.sect += p.sect;
   }
   return t;
 }
@@ -386,8 +406,9 @@ function renderRoadBars() {
   let html = "";
   for (const g of groups) {
     for (const [r, v] of Object.entries(stats.networks[g].by_road)) {
-      const pc = v.total_mi ? Math.min(100, (100 * v.collected_mi) / v.total_mi) : 0;
-      const ps = v.total_mi ? Math.min(100, (100 * v.sectioned_mi) / v.total_mi) : 0;
+      const p = roadProgress(g, r);
+      const pc = p.total ? Math.min(100, (100 * p.coll) / p.total) : 0;
+      const ps = p.total ? Math.min(100, (100 * p.sect) / p.total) : 0;
       // overlapped fills: draw the larger first, smaller on top so both stay visible
       const fills = [
         { cls: "coll", w: pc }, { cls: "sect", w: ps },
@@ -443,7 +464,7 @@ function walkCoords(c, cb) {
 }
 
 /* ===================== test lines ===================== */
-function dayIndex(day) { return stats.days.findIndex((d) => d.day === day); }
+function dayIndex(day) { return modeDays().findIndex((d) => d.day === day); }
 
 function buildTestlinePanel() {
   const box = $("#testline-panel");
@@ -461,8 +482,8 @@ function buildTestlinePanel() {
 
   const dPanel = box.querySelector("#dd-days .msdd-panel");
   dPanel.innerHTML =
-    `<label class="all-opt"><input type="checkbox" data-all="1"> All days</label>` +
-    stats.days.map((d, i) => `
+    `<label class="all-opt"><input type="checkbox" data-all="1" ${state.dayOn.size === modeDays().length ? "checked" : ""}> All days</label>` +
+    modeDays().map((d, i) => `
       <label><input type="checkbox" value="${d.day}" ${state.dayOn.has(d.day) ? "checked" : ""}>
         <span class="day-swatch" style="background:${DAY_COLORS[i % DAY_COLORS.length]}"></span>
         ${d.day}<span class="opt-meta">${d.total_mi.toFixed(1)} mi · ${d.n_files} runs</span></label>`).join("");
@@ -477,7 +498,7 @@ function buildTestlinePanel() {
 
     const newOn = new Set(boxes.filter((cb) => cb.checked).map((cb) => cb.value));
     // default newly enabled days to all runs; drop runs of disabled days
-    for (const d of stats.days) {
+    for (const d of modeDays()) {
       if (newOn.has(d.day) && !state.dayOn.has(d.day))
         d.files.forEach((f) => state.runSel.add(d.day + "|" + f.file));
       if (!newOn.has(d.day))
@@ -497,7 +518,7 @@ function buildTestlinePanel() {
 }
 
 function updateDaysButton() {
-  const n = state.dayOn.size, total = stats.days.length;
+  const n = state.dayOn.size, total = modeDays().length;
   $("#dd-days .msdd-text").textContent =
     n === 0 ? "None selected" : n === total ? `All days (${total})` : `${n} of ${total} days`;
   $("#lines-hint").textContent = n ? `${state.runSel.size} runs shown` : "";
@@ -507,7 +528,7 @@ function updateDaysButton() {
 function renderRunsDropdown() {
   const panel = $("#dd-runs .msdd-panel");
   const btn = $("#dd-runs .msdd-text");
-  const dayList = stats.days.filter((d) => state.dayOn.has(d.day));
+  const dayList = modeDays().filter((d) => state.dayOn.has(d.day));
   const multi = dayList.length > 1;
 
   const runs = dayList.flatMap((d) => d.files.map((f) => ({
@@ -717,7 +738,39 @@ $("#level-toggle").addEventListener("click", (e) => {
   applyAll();
 });
 
-init().catch((err) => {
+/* ===================== one-time password gate ===================== */
+const PW_SHA256 = "98bbf8a38ea533c0a850301967bf808bfdd22dbbe4e61a329c07ee886a09879d";
+
+async function sha256Hex(s) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function gate() {
+  if (localStorage.getItem("mp26_auth") === "1") return;
+  const el = $("#gate");
+  el.hidden = false;
+  $("#gate-pw").focus();
+  await new Promise((resolve) => {
+    $("#gate-box").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pw = $("#gate-pw").value;
+      let ok = false;
+      try { ok = (await sha256Hex(pw)) === PW_SHA256; }
+      catch (err) { ok = pw === atob("TWV0cm9waXN0YXNfMjAyNg=="); } // http fallback
+      if (ok) {
+        localStorage.setItem("mp26_auth", "1");
+        el.hidden = true;
+        resolve();
+      } else {
+        $("#gate-err").textContent = "Incorrect password";
+        $("#gate-pw").select();
+      }
+    });
+  });
+}
+
+gate().then(init).catch((err) => {
   $("#loading").textContent = "Failed to load: " + err.message;
   console.error(err);
 });

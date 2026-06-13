@@ -1,5 +1,27 @@
 # Progress Log
 
+## 2026-06-12 — round 7: MFV collected, branding, password, GitHub
+
+- **MFV collected from raw CSVs**: new ETL step reads the per-day MFV exports in
+  `Raw Data\020 MFV\Extracted Data` (main files only — Faulting/Inertial/Events/ERRORS
+  skipped), builds one polyline per RSP run from the 20-ft interval begin/end coordinates
+  (downsampled to ~100 ft), measures length from the intervals themselves, intersects with
+  the same 15 m road footprints as RFT → `testlines_MFV.geojson` + `stats.mfv`
+  (days/by_road/line totals). AM/PM files of the same day merge into one day.
+- **Mode switch now swaps data**: in MFV mode the test lines, days/runs dropdowns,
+  Collected gauge + road-bar C% all use MFV numbers; Sectioned shows 0 (not sectioned yet);
+  map views remain "pending". RFT mode unchanged.
+- All days' test lines are now visible by default (both modes).
+- Level toggle renamed: "Sections" → **"Inventory sections"** (original pavement-management
+  sections the 0.05-mi segments roll up to).
+- **ARA branding**: ara-logo.png in a white chip in the header, ARA navy theme
+  (#16356e header, navy accents replace the old blue) in chrome + sectioned color.
+- **Password gate** on first visit (SHA-256-checked, stored in localStorage so it only asks
+  once per browser). Password: Metropistas_2026. NOTE: client-side gate — deters casual
+  access only; the underlying files are still fetchable by anyone with the URL.
+- **GitHub publishing**: repo + GitHub Pages serving docs/; run_daily.bat already
+  commits + pushes docs/data daily, so the site self-updates after each ETL run.
+
 ## 2026-06-12 — round 6 (user feedback)
 
 - Test-line tooltip now appears on HOVER (follows the cursor, no close button) instead of
