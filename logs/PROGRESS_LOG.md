@@ -1,5 +1,18 @@
 # Progress Log
 
+## 2026-06-12 — round 5 (user feedback)
+
+- Test-line labels removed from the map; clicking a line opens a MapLibre popup tooltip
+  on the line with file name, test date, driven miles and the per-road on-network table
+  (bottom panel no longer used for runs). Line clicks take precedence over the polygon
+  underneath (queryRenderedFeatures guard).
+- Clicked segment/section now gets a cyan highlight outline (own "sel" source, full
+  geometry looked up in DATA, not the tile-clipped feature). Cleared when the info panel
+  is closed and on level/network switches.
+- Legend "Friction number = floor(mean μ × 100)…" note deleted.
+- AMPR/PRTR switch no longer zooms; only individual road clicks zoom.
+- Right-panel card renamed Layer → View (and MFV legend wording).
+
 ## 2026-06-12 — round 4 (user feedback)
 
 - **Colors**: value ramps now red→yellow→green (red = bad, green = good) for Friction 2026
