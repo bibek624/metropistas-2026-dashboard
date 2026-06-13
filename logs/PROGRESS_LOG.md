@@ -19,8 +19,12 @@
 - **Password gate** on first visit (SHA-256-checked, stored in localStorage so it only asks
   once per browser). Password: Metropistas_2026. NOTE: client-side gate — deters casual
   access only; the underlying files are still fetchable by anyone with the URL.
-- **GitHub publishing**: repo + GitHub Pages serving docs/; run_daily.bat already
-  commits + pushes docs/data daily, so the site self-updates after each ETL run.
+- **Hosting = Vercel via GitHub integration** (user choice; replaces the GitHub Pages
+  plan). vercel.json added (static, outputDirectory=docs, no build). Flow:
+  push repo to GitHub → import at vercel.com/new → every push (incl. run_daily.bat's
+  nightly push) auto-redeploys. Agent push to a new remote is permission-blocked, so the
+  user runs: `gh repo create metropistas-2026-dashboard --private --source . --remote
+  origin --push` from the dashboard folder, then imports the repo in Vercel.
 
 ## 2026-06-12 — round 6 (user feedback)
 
