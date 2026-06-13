@@ -1,14 +1,14 @@
 {
- "generated": "2026-06-12 16:07",
+ "generated": "2026-06-12 17:58",
  "networks": {
   "AMPR": {
    "by_road": {
     "MTSPR22": {
      "group": "AMPR",
      "total_mi": 259.95,
-     "sectioned_mi": 123.62,
+     "sectioned_mi": 179.84,
      "n_segments": 5096,
-     "n_friction": 2375,
+     "n_friction": 3475,
      "collected_mi": 203.45
     },
     "MTSPR5": {
@@ -21,9 +21,9 @@
     }
    },
    "total_mi": 274.62,
-   "sectioned_mi": 123.62,
+   "sectioned_mi": 179.84,
    "collected_mi": 203.45,
-   "pct_sectioned": 45.0,
+   "pct_sectioned": 65.5,
    "pct_collected": 74.1
   },
   "PRTR": {
