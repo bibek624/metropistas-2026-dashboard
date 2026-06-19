@@ -213,8 +213,12 @@ function colorRamp(field, stops) {
 /* red = bad, green = good; gray (C.none) stays clearly distinct for "no value" */
 const FRICTION_STOPS = [
   [20, "#d73027"], [40, "#f46d43"], [50, "#fee08b"], [60, "#a6d96a"], [80, "#1a9850"]];
+/* Δ friction: 0 is good (stable), BOTH a big rise and a big drop are notable.
+   Red–white–blue diverging: white at 0, red for a drop, blue for a rise. */
 const DIFF_STOPS = [
-  [-25, "#d73027"], [-8, "#fdae61"], [0, "#ffffbf"], [8, "#a6d96a"], [25, "#1a9850"]];
+  [-25, "#b2182b"], [-12, "#ef8a62"], [-4, "#fddbc7"],
+  [0, "#f7f7f7"],
+  [4, "#d1e5f0"], [12, "#67a9cf"], [25, "#2166ac"]];
 
 function paintFor(mode, layer, level) {
   if (mode === "MFV") return C.none;   // pending data
@@ -247,9 +251,13 @@ function legendFor(mode, layer) {
     if (state.level === "sections")
       rows.push(`<div class="legend-note">Sections shade toward blue as more of their area is sectioned.</div>`);
   } else if (layer === "d_friction") {
-    DIFF_STOPS.forEach(([v, c]) => add(c, v > 0 ? `+${v}` : String(v)));
+    add("#b2182b", "−25 (large drop)");
+    add("#fddbc7", "−4");
+    add("#f7f7f7", "≈ 0  (stable)");
+    add("#d1e5f0", "+4");
+    add("#2166ac", "+25 (large rise)");
     add(C.none, "No 2026 value");
-    rows.push(`<div class="legend-note">Friction 2026 − Friction 2025. Green = improved, red = dropped.</div>`);
+    rows.push(`<div class="legend-note">Friction 2026 − Friction 2025. White ≈ no change; red = friction dropped, blue = friction rose.</div>`);
   }
   $("#legend").innerHTML = rows.join("");
 }
